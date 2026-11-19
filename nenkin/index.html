@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>年金だけで暮らせるのか</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <meta name="description" content="年金月額の分布と生活扶助の目安、生活保護が実際に届いているかを、公的統計で見る。">
 <style>
 :root{--fg:#1f1e1b;--muted:#6b6962;--bg:#fbfaf7;--panel:#f3f1ea;--line:#dedbd1;--grid:#e8e5dc;--axis:#b9b5a8;--band:#8a867a;--c0:#c2603f;--c1:#4f7fbf;--pop:#fff}
@@ -118,9 +119,9 @@ footer{font-size:13px;color:var(--muted)}
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script>
 const comma = d3.format(',');
-const load = (name) => fetch('../data/' + name + '.json', {cache: 'no-cache'}).then((r) => { if (!r.ok) throw new Error(name); return r.json(); });
+const load = (name) => fetch('../data/' + name + '.json').then((r) => { if (!r.ok) throw new Error(name); return r.json(); });
 
-const loadObs = () => fetch('../data/observations.csv', {cache: 'no-cache'}).then((r) => { if (!r.ok) throw new Error('observations'); return r.text(); }).then((t) => d3.csvParse(t));
+const loadObs = () => fetch('../data/observations.csv').then((r) => { if (!r.ok) throw new Error('observations'); return r.text(); }).then((t) => d3.csvParse(t));
 
 Promise.all([...['pension', 'thresholds', 'reach'].map(load), loadObs()]).then(([pension, thresholds, reach, obs]) => {
   const total = (pick, below) => d3.sum(pension.filter((r) => below == null || r.low < below), pick);

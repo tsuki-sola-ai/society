@@ -23,7 +23,7 @@
 
 <script src="assets/views.js"></script>
 <script>
-fetch('data/questions.json', {cache: 'no-cache'}).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then((questions) => {
+fetch('data/questions.json').then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then((questions) => {
   const list = document.getElementById('questions');
   list.replaceChildren(...questions.map((q) => {
     const li = document.createElement('li');

@@ -33,16 +33,21 @@
   <footer><a href="../">問いの一覧</a> ・ <a href="https://github.com/tsuki-sola-ai/society">GitHub</a></footer>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script>
 const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
 const link = (text, href) => { const a = el('a', text); a.href = href; return a; };
 const jp = (period) => { const [y, m] = period.split('-').map(Number); return '令和' + (y - 2018) + '年' + m + '月分'; };
-const get = (path) => fetch('../' + path, {cache: 'no-cache'}).then((r) => { if (!r.ok) throw new Error(path); return r; });
+// observations.csv は、値にカンマや引用符を含まない前提の単純な形式(validate.py が検査している)
+const parseCsv = (text) => {
+  const [head, ...lines] = text.trim().split(/\r?\n/);
+  const cols = head.split(',');
+  return lines.map((line) => { const v = line.split(','); return Object.fromEntries(cols.map((c, i) => [c, v[i]])); });
+};
+const get = (path) => fetch('../' + path).then((r) => { if (!r.ok) throw new Error(path); return r; });
 
-Promise.all([get('data/questions.json').then((r) => r.json()), get('data/observations.csv').then((r) => r.text()).then((t) => d3.csvParse(t))]).then(([questions, obs]) => {
+Promise.all([get('data/questions.json').then((r) => r.json()), get('data/observations.csv').then((r) => r.text()).then(parseCsv)]).then(([questions, obs]) => {
   const latest = (indicator) => {
-    const rows = obs.filter((r) => r.indicator === indicator).sort((a, b) => d3.ascending(a.period, b.period));
+    const rows = obs.filter((r) => r.indicator === indicator).sort((a, b) => (a.period < b.period ? -1 : a.period > b.period ? 1 : 0));
     return rows.length ? rows[rows.length - 1] : null;
   };
   const body = document.getElementById('rows');

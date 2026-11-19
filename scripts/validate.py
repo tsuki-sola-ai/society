@@ -56,6 +56,8 @@ import csv
 with (DATA / "observations.csv").open(encoding="utf-8", newline="") as f:
     obs = list(csv.DictReader(f))
 check(bool(obs) and list(obs[0].keys()) == ["indicator", "area", "period", "value", "unit", "source", "fetched_at"], "observations: 列が想定と違う")
+for r in obs:
+    check(not any(ch in str(val) for val in r.values() for ch in ',"\n'), f"observations: 値にカンマ・引用符・改行を含めない ({r['indicator']} {r['period']})")
 keys = [(r["indicator"], r["area"], r["period"]) for r in obs]
 check(len(keys) == len(set(keys)), "observations: 同じ指標・地域・時点の行が重複している")
 for r in obs:
