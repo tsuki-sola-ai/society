@@ -22,6 +22,7 @@ b{font-variant-numeric:tabular-nums}
 .muted{color:var(--muted);font-size:13px;line-height:1.7}
 .legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--muted);margin:0;padding:0;list-style:none}
 .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
+.sw-band{background:color-mix(in srgb,var(--fg) 14%,transparent);border-left:1.5px dashed var(--fg);border-right:1.5px dashed var(--fg);border-radius:0;width:12px;height:12px;vertical-align:-1px}
 .chart{position:relative;min-height:300px}
 .chart svg{display:block;overflow:visible}
 .chart text{fill:var(--muted);font-size:12px}
@@ -49,11 +50,11 @@ footer{font-size:13px;color:var(--muted)}
 
   <section>
     <h2>基礎年金のみの人は、ほぼ全員が生活費の目安の手前にいる</h2>
-    <p>棒は、年金の月額ごとの人数です。帯は、68歳の一人暮らしに対する生活扶助(生活保護のうち食費や光熱費にあたる部分)の例で、地方の <b data-n="thr_rural">—</b>円から東京都区部の <b data-n="thr_tokyo">—</b>円までの幅を示します。家賃と医療費は含みません。</p>
+    <p>棒は、年金の月額ごとの人数です。点線で挟んだ帯は、68歳の一人暮らしに対する生活扶助(生活保護のうち食費や光熱費にあたる部分)の例で、地方の <b data-n="thr_rural">—</b>円から東京都区部の <b data-n="thr_tokyo">—</b>円までの幅を示します。家賃と医療費は含みません。</p>
     <ul class="legend">
       <li><span class="sw" style="background:var(--c0)"></span>基礎年金のみ</li>
       <li><span class="sw" style="background:var(--c1)"></span>厚生年金(基礎年金を含む)</li>
-      <li><span class="sw" style="background:var(--band);opacity:.45"></span>生活扶助の例(68歳・単身)</li>
+      <li><span class="sw sw-band"></span>生活扶助の例(68歳・単身)</li>
     </ul>
     <div class="chart" id="chart"></div>
     <p>基礎年金のみの人は <b data-n="kiso_under7_man">—</b>万人が月7万円未満で、その <b data-n="kiso_women_pct">—</b>%は女性です。厚生年金を受け取る <b data-n="kosei_total_man">—</b>万人では、月8万円未満は <b data-n="kosei_under8_man">—</b>万人(<b data-n="kosei_under8_pct">—</b>%)にとどまります。</p>
@@ -149,7 +150,7 @@ Promise.all([...['pension', 'thresholds', 'reach'].map(load), loadObs()]).then((
   const el = document.getElementById('chart');
   const draw = () => {
     const bins = pension.length, lo = thr.rural / 1e4, hi = thr.tokyo / 1e4;
-    const W = Math.max(280, el.clientWidth), H = 300, m = {t: 30, r: 6, b: 40, l: 38};
+    const W = Math.max(280, el.clientWidth), H = 310, m = {t: 40, r: 6, b: 40, l: 38};
     const x = d3.scaleLinear().domain([0, bins]).range([m.l, W - m.r]);
     const y = d3.scaleLinear().domain([0, d3.max(pension, (r) => r.kiso + r.kosei) / 1e4]).nice().range([H - m.b, m.t]);
     const bw = Math.max(1, x(1) - x(0) - 1.5);
@@ -160,18 +161,24 @@ Promise.all([...['pension', 'thresholds', 'reach'].map(load), loadObs()]).then((
       svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(v)).attr('y2', y(v)).style('stroke', 'var(--grid)');
       svg.append('text').attr('x', m.l - 6).attr('y', y(v)).attr('dy', '0.32em').attr('text-anchor', 'end').text(v);
     });
-    svg.append('rect').attr('x', x(lo)).attr('width', Math.max(2, x(hi) - x(lo))).attr('y', m.t - 6).attr('height', H - m.b - m.t + 6).style('fill', 'var(--band)').style('opacity', 0.35);
     pension.forEach((r) => {
       const a = r.kiso / 1e4, b = r.kosei / 1e4, x0 = x(r.low) + 0.75;
       svg.append('rect').attr('x', x0).attr('width', bw).attr('y', y(a)).attr('height', y(0) - y(a)).style('fill', 'var(--c0)');
       svg.append('rect').attr('x', x0).attr('width', bw).attr('y', y(a + b)).attr('height', y(a) - y(a + b)).style('fill', 'var(--c1)');
     });
-    svg.append('text').attr('x', m.l - 6).attr('y', m.t - 16).attr('text-anchor', 'end').text('万人');
+    svg.append('text').attr('x', m.l - 6).attr('y', m.t - 26).attr('text-anchor', 'end').text('万人');
     d3.range(0, bins, W < 420 ? 10 : 5).forEach((v) => {
       svg.append('text').attr('x', x(v)).attr('y', H - m.b + 16).attr('text-anchor', v === 0 ? 'start' : 'middle').text(v);
     });
     svg.append('text').attr('x', W - m.r).attr('y', H - 6).attr('text-anchor', 'end').text('年金月額(万円)');
-    svg.append('text').attr('x', x(hi) + 4).attr('y', m.t - 12).text('生活扶助の例');
+    // 生活扶助の例の範囲。棒の手前に、点線2本と薄い帯で描き、金額を添える
+    const bx0 = x(lo), bx1 = Math.max(x(lo) + 3, x(hi)), top = m.t - 8;
+    const band = svg.append('g');
+    band.append('rect').attr('x', bx0).attr('width', bx1 - bx0).attr('y', top).attr('height', H - m.b - top).style('fill', 'var(--fg)').style('opacity', 0.14);
+    [bx0, bx1].forEach((bx) => band.append('line').attr('x1', bx).attr('x2', bx).attr('y1', top).attr('y2', H - m.b).style('stroke', 'var(--fg)').style('stroke-width', 1.5).style('stroke-dasharray', '4 3'));
+    band.append('line').attr('x1', bx0).attr('x2', bx1).attr('y1', top).attr('y2', top).style('stroke', 'var(--fg)').style('stroke-width', 1.5);
+    band.append('text').attr('x', bx1 + 6).attr('y', top + 4).style('fill', 'var(--fg)').style('font-weight', 600)
+      .text('生活扶助の例 ' + lo.toFixed(1) + '〜' + hi.toFixed(1) + '万円');
     svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(0)).attr('y2', y(0)).style('stroke', 'var(--axis)');
 
     const tip = d3.select(el).append('div').attr('class', 'tip');
