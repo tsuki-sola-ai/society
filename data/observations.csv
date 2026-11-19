@@ -1,0 +1,4 @@
+indicator,area,period,value,unit,source,fetched_at
+hihogo.elderly_households,00000,2026-08,900635,世帯,https://www.mhlw.go.jp/toukei/saikin/hw/hihogosya/m2026/dl/08-01.pdf,2026-11-20
+hihogo.elderly_share,00000,2026-08,55.2,%,https://www.mhlw.go.jp/toukei/saikin/hw/hihogosya/m2026/dl/08-01.pdf,2026-11-20
+hihogo.elderly_single_households,00000,2026-08,842484,世帯,https://www.mhlw.go.jp/toukei/saikin/hw/hihogosya/m2026/dl/08-01.pdf,2026-11-20
