@@ -38,22 +38,22 @@ b{font-variant-numeric:tabular-nums}
 .chart text{fill:var(--muted);font-size:12px}
 .tip{position:absolute;pointer-events:none;background:var(--pop);border:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.15);border-radius:6px;padding:6px 9px;font-size:13px;line-height:1.5;white-space:nowrap;font-variant-numeric:tabular-nums;display:none}
 .tip span{color:var(--muted)}
-.picks-label{font-size:13px;font-weight:600;margin-bottom:-4px}
-.picks{display:flex;gap:4px;max-width:560px;border-bottom:2px solid var(--fg)}
-.pick{flex:1;font:inherit;font-size:13px;line-height:1.4;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-bottom:none;border-radius:8px 8px 0 0;padding:8px 6px 7px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;text-align:center}
-.pick .amt{font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
-.pick:hover{color:var(--fg);border-color:var(--muted)}
-.pick:focus-visible{outline:2px solid var(--c1);outline-offset:2px}
-.pick[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg);cursor:default}
 .scroll{overflow-x:auto}
-.ledger{border-collapse:collapse;width:100%;max-width:560px;font-size:15px;line-height:1.5}
+.ledger{border-collapse:collapse;width:100%;font-size:15px;line-height:1.5}
+.ledger caption{caption-side:top;text-align:left;font-size:13px;color:var(--muted);padding-bottom:6px}
 .ledger th,.ledger td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}
-.ledger th{font-size:13px;font-weight:600;color:var(--muted)}
+.ledger th{font-size:13px;font-weight:600;color:var(--muted);vertical-align:bottom;line-height:1.4}
+.ledger th .amt{display:block;color:var(--fg);font-size:15px;font-variant-numeric:tabular-nums}
 .ledger .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ledger .sub{color:var(--muted);font-size:13px}
 .ledger tr.start td{font-weight:600}
-.ledger tr.minus td.bal{color:var(--bad);font-weight:600}
-.ledger tr.mark td{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad);font-size:13px;font-weight:600;border-bottom:1px solid var(--bad)}
+.ledger td.minus{color:var(--bad);font-weight:600}
+.ledger td.first{background:color-mix(in srgb,var(--bad) 22%,transparent)}
 .ledger tr.total td{font-weight:600;border-top:2px solid var(--fg);border-bottom:none}
+.ledger th.bal,.ledger td.bal{border-left:1px solid var(--line)}
+.key{display:inline-block;width:12px;height:12px;vertical-align:-1px;margin-right:5px;border-radius:2px}
+.key.first{background:color-mix(in srgb,var(--bad) 22%,transparent);border:1px solid var(--bad)}
+@media (max-width:520px){.ledger{font-size:12px;table-layout:fixed}.ledger th,.ledger td{padding:6px 4px}.ledger th{font-size:11px}.ledger th.num{white-space:normal}.ledger th .amt{font-size:12px}.ledger .sub{display:none}.ledger th:nth-child(2){width:17%}.ledger th.bal{width:19.5%}}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:4px}
 .big{font-family:"Hiragino Mincho ProN","Noto Serif JP","Yu Mincho",serif;font-size:32px;line-height:1.2;font-variant-numeric:tabular-nums}
@@ -84,14 +84,14 @@ footer{font-size:13px;color:var(--muted)}
   <section>
     <h3>1. 家計簿で引き算してみる</h3>
     <p>一人暮らしで働いていない65歳以上の人が、実際に毎月使っている金額の平均です。年金から、上から順に引いていきます。</p>
-    <p class="picks-label" id="picks-label">年金の種類を切り替える(タブを選ぶと、表の「残り」が変わります)</p>
-    <div class="picks" id="picks" role="tablist" aria-labelledby="picks-label"></div>
     <div class="scroll">
       <table class="ledger" id="ledger">
-        <thead><tr><th>費目</th><th class="num">金額</th><th class="num">残り</th></tr></thead>
+        <caption>単位: 円。右の3列は、それぞれの年金から順に引いた残り</caption>
+        <thead></thead>
         <tbody></tbody>
       </table>
     </div>
+    <p class="muted"><span class="key first"></span>色の濃いマスは、そこで年金が尽きたことを示します。それより下の赤い数字は、足りない額の積み上がりです。</p>
     <p id="ledger-result"></p>
     <p class="muted">金額は平均です。住まいの費用は、家賃を払っていない持ち家の人も含めた平均なので低く出ています。賃貸の人はここに数万円が加わります。税金と社会保険料は、収入が少なければこれより下がります。年金がこの支出に届かない人は、実際にはここまで使えていません。食費や付き合いを切り詰めるか、貯蓄を取り崩すか、働いて補っているということです。</p>
   </section>
@@ -414,51 +414,46 @@ Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supp
       .on('pointerleave', () => { tip.style('display', 'none'); dot.style('display', 'none'); });
   };
 
-  // 家計簿の表。年金の種類を選ぶと、残りの欄が変わる
-  const yen = (v) => comma(Math.abs(v)) + '円';
+  // 家計簿の表。費目と金額は共通なので、年金3種類の「残り」を横に並べる
   const incomes = [
-    {id: 'kiso', label: '基礎年金のみの人の平均', tab: '基礎年金のみの平均', amount: avg.kiso},
-    {id: 'kiso_full', label: '基礎年金の満額', tab: '基礎年金の満額', amount: avg.kiso_full},
-    {id: 'kosei', label: '厚生年金の人の平均', tab: '厚生年金の平均', amount: avg.kosei}
-  ];
-  const picks = document.getElementById('picks'), ledgerBody = document.querySelector('#ledger tbody'), ledgerResult = document.getElementById('ledger-result');
-  const cell = (text, cls) => { const td = document.createElement('td'); td.textContent = text; if (cls) td.className = cls; return td; };
-  const drawLedger = (income) => {
-    picks.querySelectorAll('button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.id === income.id)));
-    const {rows, ranOutAt, final} = settle(income.amount);
-    const trs = [];
-    const start = document.createElement('tr'); start.className = 'start';
-    start.append(cell('年金(' + income.label + ')'), cell(''), cell(yen(income.amount), 'num bal'));
-    trs.push(start);
-    rows.forEach((r, i) => {
-      const tr = document.createElement('tr'); if (r.balance < 0) tr.className = 'minus';
-      tr.append(cell(r.item.label), cell('−' + yen(r.item.amount), 'num'), cell((r.balance < 0 ? '−' : '') + yen(r.balance), 'num bal'));
-      trs.push(tr);
-      if (i === ranOutAt) {
-        const mark = document.createElement('tr'); mark.className = 'mark';
-        const td = cell(i === rows.length - 1 ? 'ここで年金が尽きる' : 'ここで年金が尽きる。これより下は、足りない分が積み上がっていく'); td.colSpan = 3; mark.append(td); trs.push(mark);
-      }
-    });
-    const total = document.createElement('tr'); total.className = 'total' + (final < 0 ? ' minus' : '');
-    total.append(cell('ひと月の収支'), cell(''), cell((final < 0 ? '−' : '+') + yen(final), 'num bal'));
-    trs.push(total);
-    ledgerBody.replaceChildren(...trs);
-    ledgerResult.textContent = ranOutAt < 0
-      ? income.label + 'の月' + yen(income.amount) + 'なら、すべて払っても' + yen(final) + '残ります。'
-      : income.label + 'の月' + yen(income.amount) + 'では、'
-        + (ranOutAt < 3 ? kakei.slice(0, ranOutAt + 1).map((r) => r.label.replace(/\(.*\)$/, '')).join('、') + 'を払ったところで'
-          : '上から順に払っていくと「' + kakei[ranOutAt].label.replace(/\(.*\)$/, '') + '」のところで')
-        + '足りなくなります。すべて払うと、毎月' + yen(final) + 'の不足です。';
+    {id: 'kiso', label: '基礎年金のみの人の平均', head: '基礎年金のみの平均', amount: avg.kiso},
+    {id: 'kiso_full', label: '基礎年金の満額', head: '基礎年金の満額', amount: avg.kiso_full},
+    {id: 'kosei', label: '厚生年金の人の平均', head: '厚生年金の平均', amount: avg.kosei}
+  ].map((inc) => Object.assign(inc, settle(inc.amount)));
+  const mk = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
+  const yen = (v) => (v < 0 ? '−' : '') + comma(Math.abs(v));
+  const itemCell = (label) => {
+    const td = mk('td'), m = label.match(/^(.*?)(\(.*\))$/);
+    if (m) td.append(m[1], mk('span', m[2], 'sub')); else td.textContent = label;
+    return td;
   };
-  picks.replaceChildren(...incomes.map((inc) => {
-    const b = document.createElement('button'); b.type = 'button'; b.className = 'pick'; b.dataset.id = inc.id; b.setAttribute('role', 'tab');
-    const name = document.createElement('span'); name.textContent = inc.tab;
-    const amt = document.createElement('span'); amt.className = 'amt'; amt.textContent = man1(inc.amount) + '万円';
-    b.append(name, amt);
-    b.addEventListener('click', () => drawLedger(inc));
-    return b;
-  }));
-  drawLedger(incomes[0]);
+  const headRow = mk('tr');
+  headRow.append(mk('th', '費目'), mk('th', '金額', 'num'));
+  incomes.forEach((inc) => { const th = mk('th', null, 'num bal'); th.append(inc.head, mk('span', man1(inc.amount) + '万円', 'amt')); headRow.append(th); });
+  document.querySelector('#ledger thead').replaceChildren(headRow);
+  const body = [];
+  const start = mk('tr', null, 'start');
+  start.append(mk('td', '年金'), mk('td', '', 'num'));
+  incomes.forEach((inc) => start.append(mk('td', comma(inc.amount), 'num bal')));
+  body.push(start);
+  kakei.forEach((item, i) => {
+    const tr = mk('tr');
+    tr.append(itemCell(item.label), mk('td', '−' + comma(item.amount), 'num'));
+    incomes.forEach((inc) => {
+      const bal = inc.rows[i].balance;
+      tr.append(mk('td', yen(bal), 'num bal' + (bal < 0 ? ' minus' : '') + (i === inc.ranOutAt ? ' first' : '')));
+    });
+    body.push(tr);
+  });
+  const totalRow = mk('tr', null, 'total');
+  totalRow.append(mk('td', 'ひと月の収支'), mk('td', '', 'num'));
+  incomes.forEach((inc) => totalRow.append(mk('td', (inc.final < 0 ? '−' : '+') + comma(Math.abs(inc.final)), 'num bal' + (inc.final < 0 ? ' minus' : ''))));
+  body.push(totalRow);
+  document.querySelector('#ledger tbody').replaceChildren(...body);
+  const plain = (label) => label.replace(/\(.*\)$/, '');
+  document.getElementById('ledger-result').textContent = incomes.map((inc) =>
+    inc.ranOutAt < 0 ? inc.label + 'なら、すべて払っても月' + comma(inc.final) + '円残ります。'
+      : inc.label + 'では「' + plain(kakei[inc.ranOutAt].label) + '」で尽き、すべて払うと月' + comma(-inc.final) + '円の不足です。').join('');
 
   // 最低限の額と年金の比較(横棒)
   const nel = document.getElementById('need');
