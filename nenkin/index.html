@@ -38,9 +38,13 @@ b{font-variant-numeric:tabular-nums}
 .chart text{fill:var(--muted);font-size:12px}
 .tip{position:absolute;pointer-events:none;background:var(--pop);border:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.15);border-radius:6px;padding:6px 9px;font-size:13px;line-height:1.5;white-space:nowrap;font-variant-numeric:tabular-nums;display:none}
 .tip span{color:var(--muted)}
-.picks{display:flex;flex-wrap:wrap;gap:8px}
-.pick{font:inherit;font-size:14px;color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:999px;padding:5px 14px;cursor:pointer}
-.pick[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.picks-label{font-size:13px;font-weight:600;margin-bottom:-4px}
+.picks{display:flex;gap:4px;max-width:560px;border-bottom:2px solid var(--fg)}
+.pick{flex:1;font:inherit;font-size:13px;line-height:1.4;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-bottom:none;border-radius:8px 8px 0 0;padding:8px 6px 7px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;text-align:center}
+.pick .amt{font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+.pick:hover{color:var(--fg);border-color:var(--muted)}
+.pick:focus-visible{outline:2px solid var(--c1);outline-offset:2px}
+.pick[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg);cursor:default}
 .scroll{overflow-x:auto}
 .ledger{border-collapse:collapse;width:100%;max-width:560px;font-size:15px;line-height:1.5}
 .ledger th,.ledger td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}
@@ -80,7 +84,8 @@ footer{font-size:13px;color:var(--muted)}
   <section>
     <h3>1. 家計簿で引き算してみる</h3>
     <p>一人暮らしで働いていない65歳以上の人が、実際に毎月使っている金額の平均です。年金から、上から順に引いていきます。</p>
-    <div class="picks" id="picks" role="group" aria-label="年金の種類を選ぶ"></div>
+    <p class="picks-label" id="picks-label">年金の種類を切り替える(タブを選ぶと、表の「残り」が変わります)</p>
+    <div class="picks" id="picks" role="tablist" aria-labelledby="picks-label"></div>
     <div class="scroll">
       <table class="ledger" id="ledger">
         <thead><tr><th>費目</th><th class="num">金額</th><th class="num">残り</th></tr></thead>
@@ -412,14 +417,14 @@ Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supp
   // 家計簿の表。年金の種類を選ぶと、残りの欄が変わる
   const yen = (v) => comma(Math.abs(v)) + '円';
   const incomes = [
-    {id: 'kiso', label: '基礎年金のみの人の平均', amount: avg.kiso},
-    {id: 'kiso_full', label: '基礎年金の満額', amount: avg.kiso_full},
-    {id: 'kosei', label: '厚生年金の人の平均', amount: avg.kosei}
+    {id: 'kiso', label: '基礎年金のみの人の平均', tab: '基礎年金のみの平均', amount: avg.kiso},
+    {id: 'kiso_full', label: '基礎年金の満額', tab: '基礎年金の満額', amount: avg.kiso_full},
+    {id: 'kosei', label: '厚生年金の人の平均', tab: '厚生年金の平均', amount: avg.kosei}
   ];
   const picks = document.getElementById('picks'), ledgerBody = document.querySelector('#ledger tbody'), ledgerResult = document.getElementById('ledger-result');
   const cell = (text, cls) => { const td = document.createElement('td'); td.textContent = text; if (cls) td.className = cls; return td; };
   const drawLedger = (income) => {
-    picks.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === income.id)));
+    picks.querySelectorAll('button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.id === income.id)));
     const {rows, ranOutAt, final} = settle(income.amount);
     const trs = [];
     const start = document.createElement('tr'); start.className = 'start';
@@ -446,8 +451,10 @@ Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supp
         + '足りなくなります。すべて払うと、毎月' + yen(final) + 'の不足です。';
   };
   picks.replaceChildren(...incomes.map((inc) => {
-    const b = document.createElement('button'); b.type = 'button'; b.className = 'pick'; b.dataset.id = inc.id;
-    b.textContent = inc.label + ' ' + man1(inc.amount) + '万円';
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'pick'; b.dataset.id = inc.id; b.setAttribute('role', 'tab');
+    const name = document.createElement('span'); name.textContent = inc.tab;
+    const amt = document.createElement('span'); amt.className = 'amt'; amt.textContent = man1(inc.amount) + '万円';
+    b.append(name, amt);
     b.addEventListener('click', () => drawLedger(inc));
     return b;
   }));
