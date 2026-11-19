@@ -30,10 +30,22 @@ for key, total in PUBLISHED_TOTALS.items():
     got = sum(row[key] for row in pension)
     check(got == total, f"pension: {key} の合計 {got:,} が公表値 {total:,} と不一致")
 
-# 生活扶助の例: 常識的な範囲にあること
-thresholds = {row["id"]: row["amount"] for row in load("thresholds.json")}
+# 必要な額(生活保護の基準): 生活扶助と住宅扶助の上限が、常識的な範囲にあること
+thresholds = {row["id"]: row for row in load("thresholds.json")}
 check(set(thresholds) == {"rural", "tokyo"}, "thresholds: rural と tokyo が必要")
-check(50_000 < thresholds.get("rural", 0) < thresholds.get("tokyo", 0) < 120_000, "thresholds: 金額が想定範囲外")
+if set(thresholds) == {"rural", "tokyo"}:
+    check(50_000 < thresholds["rural"]["living"] < thresholds["tokyo"]["living"] < 120_000, "thresholds: 生活扶助が想定範囲外")
+    check(15_000 < thresholds["rural"]["rent"] < thresholds["tokyo"]["rent"] < 80_000, "thresholds: 住宅扶助が想定範囲外")
+
+# 年金の平均額: 基礎のみ < 満額 < 厚生年金の順で、分布から概算した平均とも大きくずれないこと
+avg = {row["id"]: row["amount"] for row in load("pension_avg.json")}
+check(set(avg) == {"kiso", "kiso_full", "kosei"}, "pension_avg: kiso, kiso_full, kosei が必要")
+if set(avg) == {"kiso", "kiso_full", "kosei"}:
+    check(30_000 < avg["kiso"] < avg["kiso_full"] < avg["kosei"] < 300_000, "pension_avg: 金額の大小関係が想定と違う")
+    for key in ["kiso", "kosei"]:
+        people = sum(row[key] for row in pension)
+        rough = sum(row[key] * (row["low"] + 0.5) * 10_000 for row in pension) / people
+        check(abs(rough - avg[key]) < 8_000, f"pension_avg: {key} の平均 {avg[key]:,} が分布からの概算 {rough:,.0f} と離れすぎ")
 
 # 受給実態: 月次更新される3項目の整合
 reach = {row["id"]: row for row in load("reach.json")}

@@ -22,6 +22,8 @@ b{font-variant-numeric:tabular-nums}
 .muted{color:var(--muted);font-size:13px;line-height:1.7}
 .legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--muted);margin:0;padding:0;list-style:none}
 .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
+.sw-living{background:color-mix(in srgb,var(--fg) 62%,transparent)}
+.sw-rent{background:color-mix(in srgb,var(--fg) 28%,transparent)}
 .sw-band{background:color-mix(in srgb,var(--fg) 14%,transparent);border-left:1.5px dashed var(--fg);border-right:1.5px dashed var(--fg);border-radius:0;width:12px;height:12px;vertical-align:-1px}
 .chart{position:relative;min-height:300px}
 .chart svg{display:block;overflow:visible}
@@ -45,20 +47,34 @@ footer{font-size:13px;color:var(--muted)}
   <header>
     <nav class="muted"><a href="../">← 問いの一覧</a></nav>
     <h1>年金だけで暮らせるのか</h1>
-    <p class="lead">基礎年金だけを受け取っている <b data-n="kiso_total_man">—</b>万人のうち、<b data-n="kiso_under7_pct">—</b>%は年金が月7万円に届きません。一人暮らしの高齢者に国が定める生活費の目安と、ほぼ同じかそれ未満の水準です。</p>
+    <p class="lead">一人暮らしの高齢者が最低限の生活を送るのに必要とされる額は、家賃を含めて月 <b data-n="need_lo">—</b>万〜<b data-n="need_hi">—</b>万円です。基礎年金だけの人が受け取っている年金は平均で月 <b data-n="kiso_avg">—</b>万円。毎月 <b data-n="gap_lo">—</b>万〜<b data-n="gap_hi">—</b>万円足りません。</p>
   </header>
 
   <section>
-    <h2>基礎年金のみの人は、ほぼ全員が生活費の目安の手前にいる</h2>
-    <p>棒は、年金の月額ごとの人数です。点線で挟んだ帯は、68歳の一人暮らしに対する生活扶助(生活保護のうち食費や光熱費にあたる部分)の例で、地方の <b data-n="thr_rural">—</b>円から東京都区部の <b data-n="thr_tokyo">—</b>円までの幅を示します。家賃と医療費は含みません。</p>
+    <h2>いくら必要で、いくら足りないのか</h2>
+    <p>上の3本が必要な額、下の3本が受け取っている年金です。必要な額は、国が生活保護で保障している水準を使っています。</p>
+    <div class="chart" id="need" style="min-height:330px"></div>
+    <ul class="legend">
+      <li><span class="sw sw-living"></span>生活費(食費、光熱費など)</li>
+      <li><span class="sw sw-rent"></span>家賃</li>
+      <li><span class="sw" style="background:var(--c0)"></span>基礎年金</li>
+      <li><span class="sw" style="background:var(--c1)"></span>厚生年金</li>
+    </ul>
+    <p>東京23区で賃貸に暮らす場合、必要な額は月 <b data-n="need_hi">—</b>万円で、基礎年金のみの人の平均とは <b data-n="gap_hi">—</b>万円の差があります。家賃のかからない持ち家でも、地方で月 <b data-n="own_lo">—</b>万円が必要で、<b data-n="gap_own">—</b>万円足りません。基礎年金は、40年間納めた満額でも月 <b data-n="kiso_full">—</b>万円です。</p>
+    <p class="muted">必要な額は、生活保護の基準から出しています。食費や光熱費にあたる生活扶助と、家賃にあたる住宅扶助の上限の合計で、68歳の一人暮らしの場合です。医療費と介護費は別に保障されるため、含めていません。家賃は上限額で計算しているので、実際の家賃がそれより安ければ必要な額も下がります。地方の家賃は青森県の町村の例で、地域によって上限は異なります。</p>
+  </section>
+
+  <section>
+    <h2>年金の分布で見ると、基礎年金のみの人は家賃がなくても届かない</h2>
+    <p>棒は、年金の月額ごとの人数です。点線で挟んだ二つの帯が、必要な額の範囲です。左の帯は家賃がない場合(<b data-n="own_lo">—</b>万〜<b data-n="own_hi">—</b>万円)、右の帯は家賃を含む場合(<b data-n="need_lo">—</b>万〜<b data-n="need_hi">—</b>万円)です。</p>
     <ul class="legend">
       <li><span class="sw" style="background:var(--c0)"></span>基礎年金のみ</li>
       <li><span class="sw" style="background:var(--c1)"></span>厚生年金(基礎年金を含む)</li>
-      <li><span class="sw sw-band"></span>生活扶助の例(68歳・単身)</li>
+      <li><span class="sw sw-band"></span>必要な額の範囲(68歳・単身)</li>
     </ul>
     <div class="chart" id="chart"></div>
-    <p>基礎年金のみの人は <b data-n="kiso_under7_man">—</b>万人が月7万円未満で、その <b data-n="kiso_women_pct">—</b>%は女性です。厚生年金を受け取る <b data-n="kosei_total_man">—</b>万人では、月8万円未満は <b data-n="kosei_under8_man">—</b>万人(<b data-n="kosei_under8_pct">—</b>%)にとどまります。</p>
-    <p class="muted">ここでは、あえて一人ひとりの年金額で見ています。憲法25条が保障する最低限度の生活は個人の権利であり、一人で暮らすことになったときに自分の年金で届くかどうかを示すためです。帯より左にいる人には、配偶者の年金や仕事の収入、貯蓄と合わせて暮らしている人も含まれ、全員が今困窮しているわけではありません。ただ、死別や離別でその支えがなくなれば、自分の年金だけでは目安に届かなくなります。なお、生活保護を受けられるかどうかは、個人ではなく世帯単位で判定されます。年金額は令和6年度末、生活扶助は令和8年10月の水準で、その間に年金は約4%引き上げられています。</p>
+    <p>基礎年金のみの <b data-n="kiso_total_man">—</b>万人のうち、<b data-n="kiso_under7_man">—</b>万人(<b data-n="kiso_under7_pct">—</b>%)は月7万円未満で、家賃がなくても必要な額に届きません。その <b data-n="kiso_women_pct">—</b>%は女性です。厚生年金を受け取る <b data-n="kosei_total_man">—</b>万人でも、月 <b data-n="rent_lo_man">—</b>万円未満の人が <b data-n="kosei_under_lo_man">—</b>万人(<b data-n="kosei_under_lo_pct">—</b>%)、月 <b data-n="rent_hi_man">—</b>万円未満の人が <b data-n="kosei_under_hi_man">—</b>万人(<b data-n="kosei_under_hi_pct">—</b>%)います。賃貸で一人暮らしになれば、厚生年金があっても足りない人が少なくないということです。</p>
+    <p class="muted">ここでは、あえて一人ひとりの年金額で見ています。憲法25条が保障する最低限度の生活は個人の権利であり、一人で暮らすことになったときに自分の年金で届くかどうかを示すためです。帯より左にいる人には、配偶者の年金や仕事の収入、貯蓄と合わせて暮らしている人も含まれ、全員が今困窮しているわけではありません。ただ、死別や離別でその支えがなくなれば、自分の年金だけでは目安に届かなくなります。なお、生活保護を受けられるかどうかは、個人ではなく世帯単位で判定されます。また、65歳以上の8割以上は持ち家に住んでいるので、家賃を含む水準が当てはまるのは一部の人です。年金額は令和6年度末、必要な額は令和8年10月の水準で、その間に年金は約4%引き上げられています。</p>
   </section>
 
   <section>
@@ -105,7 +121,10 @@ footer{font-size:13px;color:var(--muted)}
     <summary>出典と、数字の読み方の注意</summary>
     <ul>
       <li>年金月額の分布: <a href="https://www.mhlw.go.jp/content/001617995.pdf">厚生労働省「令和6年度 厚生年金保険・国民年金事業の概況」</a>参考資料3・4。「基礎年金のみ」は、厚生年金と共済の加入期間がない老齢基礎年金の受給権者と、旧国民年金の受給権者。厚生年金は民間企業の加入者(第1号)で、金額に基礎年金を含みます。公務員などの共済は入っていません。基礎年金のみの「7万円以上」は、7〜8万円の位置にまとめて描いています。</li>
-      <li>生活扶助の例: <a href="https://www.mhlw.go.jp/content/001152601.pdf">厚生労働省「生活扶助基準額の算出方法」</a>と、同省が公表している世帯類型別の例(高齢者単身世帯・68歳、令和8年10月)。例の金額は二次情報で確認しました。75歳以上はこれよりやや低く、賃貸の場合は地域ごとの上限内で家賃分が別に加わります。</li>
+      <li>必要な額のうち生活費(生活扶助): <a href="https://www.mhlw.go.jp/content/001152601.pdf">厚生労働省「生活扶助基準額の算出方法」</a>と、同省が公表している世帯類型別の例(高齢者単身世帯・68歳、令和8年10月)。例の金額は二次情報で確認しました。75歳以上はこれよりやや低くなります。</li>
+      <li>必要な額のうち家賃(住宅扶助): 厚生労働省の通知で定められた単身世帯の限度額。東京23区は53,700円、地方の例は青森県の3級地(町村部)で30,000円。<a href="https://kobekoubora.life.coocan.jp/202004juutakufujo.pdf">令和2年4月時点の限度額一覧の写し</a>などで確認しました。限度額は都道府県や市によって異なり、単身ではおよそ2.5万〜5.4万円の幅があります。支給されるのは、限度額までの実際の家賃です。</li>
+      <li>年金の平均額と満額: 平均は上と同じ「事業の概況」(令和6年度末)。基礎年金の満額は<a href="https://www.nenkin.go.jp/oshirase/taisetu/kojin/2026/202604/0401.html">日本年金機構「令和8年4月分からの年金額等について」</a>。</li>
+      <li>持ち家の割合: <a href="https://www8.cao.go.jp/kourei/whitepaper/w-2023/zenbun/05pdf_index.html">内閣府「令和5年版高齢社会白書」</a>。</li>
       <li>高齢者世帯の数: 厚生労働省「被保護者調査」月次概数。毎月自動で取り込み、検算に通ったものだけを反映しています。</li>
       <li>年金を受けている被保護高齢者の割合: <a href="https://oisr-org.ws.hosei.ac.jp/images/oz/contents/ohara_787_p16.pdf">大原社会問題研究所雑誌 787号</a>(被保護者調査に基づく)。</li>
       <li>申請件数と保護開始世帯数: 被保護者調査の2024年分を、<a href="https://www.newsweekjapan.jp/articles/-/16014">ニューズウィーク日本版の記事</a>の集計で確認。</li>
@@ -124,22 +143,33 @@ const load = (name) => fetch('../data/' + name + '.json').then((r) => { if (!r.o
 
 const loadObs = () => fetch('../data/observations.csv').then((r) => { if (!r.ok) throw new Error('observations'); return r.text(); }).then((t) => d3.csvParse(t));
 
-Promise.all([...['pension', 'thresholds', 'reach'].map(load), loadObs()]).then(([pension, thresholds, reach, obs]) => {
+Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg'].map(load), loadObs()]).then(([pension, thresholds, reach, pensionAvg, obs]) => {
   const total = (pick, below) => d3.sum(pension.filter((r) => below == null || r.low < below), pick);
   const kiso = total((r) => r.kiso), kisoUnder7 = total((r) => r.kiso, 7), kisoWomen = total((r) => r.kiso_f);
-  const kosei = total((r) => r.kosei), koseiUnder8 = total((r) => r.kosei, 8);
+  const kosei = total((r) => r.kosei);
   const byId = Object.fromEntries(reach.map((r) => [r.id, r]));
-  const thr = Object.fromEntries(thresholds.map((r) => [r.id, r.amount]));
+  const avg = Object.fromEntries(pensionAvg.map((r) => [r.id, r.amount]));
+  // 必要な額: 家賃なし(生活扶助のみ)と、家賃を含む場合(生活扶助+住宅扶助の上限)
+  const ownLo = d3.min(thresholds, (r) => r.living), ownHi = d3.max(thresholds, (r) => r.living);
+  const needLo = d3.min(thresholds, (r) => r.living + r.rent), needHi = d3.max(thresholds, (r) => r.living + r.rent);
+  const rentLoMan = Math.round(needLo / 1e4), rentHiMan = Math.round(needHi / 1e4);
+  const koseiUnderLo = total((r) => r.kosei, rentLoMan), koseiUnderHi = total((r) => r.kosei, rentHiMan);
+  const man1 = (yen) => (yen / 1e4).toFixed(1);
   const n = {
     kiso_total_man: comma(Math.round(kiso / 1e4)),
     kiso_under7_man: comma(Math.round(kisoUnder7 / 1e4)),
     kiso_under7_pct: Math.round(kisoUnder7 / kiso * 100),
     kiso_women_pct: Math.round(kisoWomen / kiso * 100),
     kosei_total_man: comma(Math.round(kosei / 1e4)),
-    kosei_under8_man: comma(Math.round(koseiUnder8 / 1e4)),
-    kosei_under8_pct: (koseiUnder8 / kosei * 100).toFixed(1),
-    thr_rural: comma(thr.rural),
-    thr_tokyo: comma(thr.tokyo),
+    rent_lo_man: rentLoMan,
+    rent_hi_man: rentHiMan,
+    kosei_under_lo_man: comma(Math.round(koseiUnderLo / 1e4)),
+    kosei_under_lo_pct: Math.round(koseiUnderLo / kosei * 100),
+    kosei_under_hi_man: comma(Math.round(koseiUnderHi / 1e4)),
+    kosei_under_hi_pct: Math.round(koseiUnderHi / kosei * 100),
+    need_lo: man1(needLo), need_hi: man1(needHi), own_lo: man1(ownLo), own_hi: man1(ownHi),
+    kiso_avg: man1(avg.kiso), kiso_full: man1(avg.kiso_full),
+    gap_lo: man1(needLo - avg.kiso), gap_hi: man1(needHi - avg.kiso), gap_own: man1(ownLo - avg.kiso),
     start_pct: (byId.starts_2024.raw / byId.applications_2024.raw * 100).toFixed(1),
     kyoto_pct: (byId.kyoto_apply.raw / byId.kyoto_consult.raw * 100).toFixed(1)
   };
@@ -149,14 +179,14 @@ Promise.all([...['pension', 'thresholds', 'reach'].map(load), loadObs()]).then((
 
   const el = document.getElementById('chart');
   const draw = () => {
-    const bins = pension.length, lo = thr.rural / 1e4, hi = thr.tokyo / 1e4;
-    const W = Math.max(280, el.clientWidth), H = 310, m = {t: 40, r: 6, b: 40, l: 38};
+    const bins = pension.length;
+    const W = Math.max(280, el.clientWidth), H = 330, m = {t: 60, r: 6, b: 40, l: 38};
     const x = d3.scaleLinear().domain([0, bins]).range([m.l, W - m.r]);
     const y = d3.scaleLinear().domain([0, d3.max(pension, (r) => r.kiso + r.kosei) / 1e4]).nice().range([H - m.b, m.t]);
     const bw = Math.max(1, x(1) - x(0) - 1.5);
     el.replaceChildren();
     const svg = d3.select(el).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('width', '100%').attr('role', 'img')
-      .attr('aria-label', '年金月額ごとの受給権者数の棒グラフ。基礎年金のみの人は月7万円未満に集中し、厚生年金の人は月10万円から20万円に広く分布する。生活扶助の例は月7.0万円から7.8万円。');
+      .attr('aria-label', '年金月額ごとの受給権者数の棒グラフ。基礎年金のみの人は月7万円未満に集中し、厚生年金の人は月10万円から20万円に広く分布する。必要な額は、家賃がない場合で月' + man1(ownLo) + '万円から' + man1(ownHi) + '万円、家賃を含む場合で月' + man1(needLo) + '万円から' + man1(needHi) + '万円。');
     y.ticks(4).forEach((v) => {
       svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(v)).attr('y2', y(v)).style('stroke', 'var(--grid)');
       svg.append('text').attr('x', m.l - 6).attr('y', y(v)).attr('dy', '0.32em').attr('text-anchor', 'end').text(v);
@@ -166,19 +196,22 @@ Promise.all([...['pension', 'thresholds', 'reach'].map(load), loadObs()]).then((
       svg.append('rect').attr('x', x0).attr('width', bw).attr('y', y(a)).attr('height', y(0) - y(a)).style('fill', 'var(--c0)');
       svg.append('rect').attr('x', x0).attr('width', bw).attr('y', y(a + b)).attr('height', y(a) - y(a + b)).style('fill', 'var(--c1)');
     });
-    svg.append('text').attr('x', m.l - 6).attr('y', m.t - 26).attr('text-anchor', 'end').text('万人');
+    svg.append('text').attr('x', m.l - 6).attr('y', m.t - 46).attr('text-anchor', 'end').text('万人');
     d3.range(0, bins, W < 420 ? 10 : 5).forEach((v) => {
       svg.append('text').attr('x', x(v)).attr('y', H - m.b + 16).attr('text-anchor', v === 0 ? 'start' : 'middle').text(v);
     });
     svg.append('text').attr('x', W - m.r).attr('y', H - 6).attr('text-anchor', 'end').text('年金月額(万円)');
-    // 生活扶助の例の範囲。棒の手前に、点線2本と薄い帯で描き、金額を添える
-    const bx0 = x(lo), bx1 = Math.max(x(lo) + 3, x(hi)), top = m.t - 8;
-    const band = svg.append('g');
-    band.append('rect').attr('x', bx0).attr('width', bx1 - bx0).attr('y', top).attr('height', H - m.b - top).style('fill', 'var(--fg)').style('opacity', 0.14);
-    [bx0, bx1].forEach((bx) => band.append('line').attr('x1', bx).attr('x2', bx).attr('y1', top).attr('y2', H - m.b).style('stroke', 'var(--fg)').style('stroke-width', 1.5).style('stroke-dasharray', '4 3'));
-    band.append('line').attr('x1', bx0).attr('x2', bx1).attr('y1', top).attr('y2', top).style('stroke', 'var(--fg)').style('stroke-width', 1.5);
-    band.append('text').attr('x', bx1 + 6).attr('y', top + 4).style('fill', 'var(--fg)').style('font-weight', 600)
-      .text('生活扶助の例 ' + lo.toFixed(1) + '〜' + hi.toFixed(1) + '万円');
+    // 必要な額の範囲。棒の手前に、点線2本と薄い帯で描き、金額を添える。ラベルは重ならないよう2段に分ける
+    const drawBand = (lo, hi, label, row) => {
+      const bx0 = x(lo), bx1 = Math.max(x(lo) + 3, x(hi)), top = m.t - 8 - row * 18;
+      const g = svg.append('g');
+      g.append('rect').attr('x', bx0).attr('width', bx1 - bx0).attr('y', top).attr('height', H - m.b - top).style('fill', 'var(--fg)').style('opacity', 0.14);
+      [bx0, bx1].forEach((bx) => g.append('line').attr('x1', bx).attr('x2', bx).attr('y1', top).attr('y2', H - m.b).style('stroke', 'var(--fg)').style('stroke-width', 1.5).style('stroke-dasharray', '4 3'));
+      g.append('line').attr('x1', bx0).attr('x2', bx1).attr('y1', top).attr('y2', top).style('stroke', 'var(--fg)').style('stroke-width', 1.5);
+      g.append('text').attr('x', bx1 + 6).attr('y', top + 4).style('fill', 'var(--fg)').style('font-weight', 600).text(label);
+    };
+    drawBand(ownLo / 1e4, ownHi / 1e4, '家賃なし ' + man1(ownLo) + '〜' + man1(ownHi) + '万円', 1);
+    drawBand(needLo / 1e4, needHi / 1e4, '家賃込み ' + man1(needLo) + '〜' + man1(needHi) + '万円', 0);
     svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(0)).attr('y2', y(0)).style('stroke', 'var(--axis)');
 
     const tip = d3.select(el).append('div').attr('class', 'tip');
@@ -251,10 +284,53 @@ Promise.all([...['pension', 'thresholds', 'reach'].map(load), loadObs()]).then((
       .on('pointerleave', () => { tip.style('display', 'none'); dot.style('display', 'none'); });
   };
 
+  // 必要な額と年金の比較(横棒)
+  const nel = document.getElementById('need');
+  const tk = thresholds.find((r) => r.id === 'tokyo'), ru = thresholds.find((r) => r.id === 'rural');
+  const rowsNeed = [
+    {group: '必要な額', label: tk.label, parts: [{v: tk.living, cls: 'living'}, {v: tk.rent, cls: 'rent'}]},
+    {label: ru.label, parts: [{v: ru.living, cls: 'living'}, {v: ru.rent, cls: 'rent'}]},
+    {label: '地方の持ち家(家賃なし)', parts: [{v: ru.living, cls: 'living'}]},
+    {group: '受け取っている年金', label: '基礎年金のみの人の平均', parts: [{v: avg.kiso, cls: 'c0'}]},
+    {label: '基礎年金の満額', parts: [{v: avg.kiso_full, cls: 'c0'}]},
+    {label: '厚生年金の人の平均(基礎年金を含む)', parts: [{v: avg.kosei, cls: 'c1'}]}
+  ];
+  const fills = {living: ['var(--fg)', 0.62], rent: ['var(--fg)', 0.28], c0: ['var(--c0)', 1], c1: ['var(--c1)', 1]};
+  const drawNeed = () => {
+    nel.replaceChildren();
+    const W = Math.max(280, nel.clientWidth), m = {l: 2, r: 64}, rowH = 44, groupH = 26;
+    const x = d3.scaleLinear().domain([0, d3.max(rowsNeed, (r) => d3.sum(r.parts, (p) => p.v))]).range([m.l, W - m.r]);
+    const H = rowsNeed.length * rowH + rowsNeed.filter((r) => r.group).length * groupH + 6;
+    const svg = d3.select(nel).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('width', '100%').attr('role', 'img')
+      .attr('aria-label', '一人暮らしの高齢者に必要な額と、受け取っている年金の比較。' + rowsNeed.map((r) => r.label + ' ' + man1(d3.sum(r.parts, (p) => p.v)) + '万円').join('、') + '。');
+    let yy = 0;
+    rowsNeed.forEach((r) => {
+      if (r.group) {
+        svg.append('text').attr('x', m.l).attr('y', yy + 16).style('font-weight', 600).style('fill', 'var(--fg)').style('font-size', '13px').text(r.group);
+        yy += groupH;
+      }
+      svg.append('text').attr('x', m.l).attr('y', yy + 13).style('font-size', '13px').text(r.label);
+      let x0 = m.l;
+      r.parts.forEach((p) => {
+        const w = x(p.v) - x(0);
+        svg.append('rect').attr('x', x0).attr('y', yy + 19).attr('width', w).attr('height', 16).style('fill', fills[p.cls][0]).style('opacity', fills[p.cls][1]);
+        x0 += w;
+      });
+      svg.append('text').attr('x', x0 + 6).attr('y', yy + 32).style('fill', 'var(--fg)').style('font-weight', 600).style('font-size', '14px')
+        .text(man1(d3.sum(r.parts, (p) => p.v)) + '万円');
+      yy += rowH;
+    });
+    // 基礎年金のみの平均の位置に縦線を引き、必要な額との差が見えるようにする
+    const ax = x(avg.kiso);
+    svg.append('line').attr('x1', ax).attr('x2', ax).attr('y1', groupH + 14).attr('y2', groupH + rowH * 3 + groupH + 36)
+      .style('stroke', 'var(--c0)').style('stroke-width', 1.5).style('stroke-dasharray', '4 3');
+  };
+
   draw();
+  drawNeed();
   drawTrend();
   let last = el.clientWidth;
-  new ResizeObserver(() => { if (el.clientWidth !== last) { last = el.clientWidth; draw(); drawTrend(); } }).observe(el);
+  new ResizeObserver(() => { if (el.clientWidth !== last) { last = el.clientWidth; draw(); drawNeed(); drawTrend(); } }).observe(el);
 }).catch((e) => {
   document.getElementById('chart').textContent = 'データを読み込めませんでした。';
   console.error(e);
