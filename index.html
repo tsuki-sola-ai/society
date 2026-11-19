@@ -90,6 +90,13 @@ footer{font-size:13px;color:var(--muted)}
     <p>申請まで進めば9割近くが受給に至ります。一方で、相談から申請に進む人は京都市の例で3割ほどです。相談した人には、対象外の人や情報を集めに来ただけの人も含まれるので、残りがすべて断られたわけではありません。ただ、窓口で申請に至らなかった人の数を国は集計しておらず、ここが一番見えない部分です。</p>
   </section>
 
+  <section>
+    <h2>生活保護を受ける高齢者世帯の推移</h2>
+    <p>最新の <b data-t="period">—</b>は <b data-t="latest">—</b>万世帯で、前年の同じ月と比べて <b data-t="diff">—</b>世帯(<b data-t="pct">—</b>%)です。</p>
+    <div class="chart" id="trend"></div>
+    <p class="muted">縦軸は0から始まっていません。変化を見やすくするために範囲を絞っているので、実際の増減は全体の1〜2%ほどです。毎年3月に1万世帯前後の段差がありますが、原因は確認できていません。月ごとの上下ではなく、前年の同じ月との比較で読んでください。数字は毎月の概数で、あとから確定値で訂正されることがあります。</p>
+  </section>
+
   <details>
     <summary>出典と、数字の読み方の注意</summary>
     <ul>
@@ -111,7 +118,9 @@ footer{font-size:13px;color:var(--muted)}
 const comma = d3.format(',');
 const load = (name) => fetch('data/' + name + '.json', {cache: 'no-cache'}).then((r) => { if (!r.ok) throw new Error(name); return r.json(); });
 
-Promise.all(['pension', 'thresholds', 'reach'].map(load)).then(([pension, thresholds, reach]) => {
+const loadObs = () => fetch('data/observations.csv', {cache: 'no-cache'}).then((r) => { if (!r.ok) throw new Error('observations'); return r.text(); }).then((t) => d3.csvParse(t));
+
+Promise.all([...['pension', 'thresholds', 'reach'].map(load), loadObs()]).then(([pension, thresholds, reach, obs]) => {
   const total = (pick, below) => d3.sum(pension.filter((r) => below == null || r.low < below), pick);
   const kiso = total((r) => r.kiso), kisoUnder7 = total((r) => r.kiso, 7), kisoWomen = total((r) => r.kiso_f);
   const kosei = total((r) => r.kosei), koseiUnder8 = total((r) => r.kosei, 8);
@@ -178,9 +187,64 @@ Promise.all(['pension', 'thresholds', 'reach'].map(load)).then(([pension, thresh
         .on('pointerleave', () => tip.style('display', 'none'));
     });
   };
+  // 高齢者世帯数の推移(全国、月次)
+  const series = obs.filter((r) => r.indicator === 'hihogo.elderly_households' && r.area === '00000')
+    .map((r) => ({period: r.period, date: new Date(r.period + '-01T00:00:00Z'), value: +r.value}))
+    .sort((a, b) => d3.ascending(a.period, b.period));
+  const jp = (period) => { const [y, m] = period.split('-').map(Number); return '令和' + (y - 2018) + '年' + m + '月'; };
+  const signed = d3.format('+,');
+  if (series.length) {
+    const lastPt = series[series.length - 1];
+    const [ly, lm] = lastPt.period.split('-');
+    const prev = series.find((d) => d.period === (ly - 1) + '-' + lm);
+    const t = {period: jp(lastPt.period), latest: (lastPt.value / 1e4).toFixed(1),
+      diff: prev ? signed(lastPt.value - prev.value) : '—',
+      pct: prev ? d3.format('+.1f')((lastPt.value / prev.value - 1) * 100) : '—'};
+    document.querySelectorAll('[data-t]').forEach((e) => { e.textContent = t[e.dataset.t]; });
+  }
+  const tel = document.getElementById('trend');
+  const drawTrend = () => {
+    tel.replaceChildren();
+    if (series.length < 2) { tel.textContent = '推移を描けるだけのデータがまだありません。'; return; }
+    const W = Math.max(280, tel.clientWidth), H = 260, m = {t: 24, r: 14, b: 32, l: 44};
+    const x = d3.scaleUtc().domain(d3.extent(series, (d) => d.date)).range([m.l, W - m.r]);
+    const y = d3.scaleLinear().domain(d3.extent(series, (d) => d.value / 1e4)).nice(4).range([H - m.b, m.t]);
+    const svg = d3.select(tel).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('width', '100%').attr('role', 'img')
+      .attr('aria-label', '生活保護を受けている高齢者世帯数の月ごとの推移を示す折れ線グラフ。' + jp(series[0].period) + 'から' + jp(series[series.length - 1].period) + 'まで。');
+    y.ticks(4).forEach((v) => {
+      svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(v)).attr('y2', y(v)).style('stroke', 'var(--grid)');
+      svg.append('text').attr('x', m.l - 6).attr('y', y(v)).attr('dy', '0.32em').attr('text-anchor', 'end').text(v.toFixed(1));
+    });
+    svg.append('text').attr('x', m.l - 6).attr('y', m.t - 12).attr('text-anchor', 'end').text('万世帯');
+    const years = d3.utcYear.range(d3.utcYear.ceil(series[0].date), d3.utcDay.offset(series[series.length - 1].date, 1));
+    years.forEach((d) => {
+      svg.append('line').attr('x1', x(d)).attr('x2', x(d)).attr('y1', H - m.b).attr('y2', H - m.b + 5).style('stroke', 'var(--axis)');
+      svg.append('text').attr('x', x(d)).attr('y', H - m.b + 19).attr('text-anchor', 'middle').text(d.getUTCFullYear() + '年');
+    });
+    svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', H - m.b).attr('y2', H - m.b).style('stroke', 'var(--axis)');
+    svg.append('path').attr('d', d3.line().x((d) => x(d.date)).y((d) => y(d.value / 1e4))(series)).style('fill', 'none').style('stroke', 'var(--c0)').style('stroke-width', 2);
+    const dot = svg.append('circle').attr('r', 4).style('fill', 'var(--c0)').style('display', 'none');
+    const tip = d3.select(tel).append('div').attr('class', 'tip');
+    const move = (event) => {
+      const box = tel.getBoundingClientRect();
+      const px = (event.clientX - box.left) * (W / box.width);
+      const d = series[d3.leastIndex(series, (a, b) => Math.abs(x(a.date) - px) - Math.abs(x(b.date) - px))];
+      dot.style('display', null).attr('cx', x(d.date)).attr('cy', y(d.value / 1e4));
+      tip.style('display', 'block').text('');
+      tip.append('div').text(jp(d.period));
+      tip.append('div').append('b').text(comma(d.value) + '世帯');
+      const tw = tip.node().offsetWidth, th = tip.node().offsetHeight;
+      tip.style('left', Math.max(0, Math.min(box.width - tw, event.clientX - box.left + 10)) + 'px').style('top', Math.max(0, event.clientY - box.top - th - 10) + 'px');
+    };
+    svg.append('rect').attr('x', m.l).attr('width', W - m.l - m.r).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointerenter pointermove pointerdown', move)
+      .on('pointerleave', () => { tip.style('display', 'none'); dot.style('display', 'none'); });
+  };
+
   draw();
+  drawTrend();
   let last = el.clientWidth;
-  new ResizeObserver(() => { if (el.clientWidth !== last) { last = el.clientWidth; draw(); } }).observe(el);
+  new ResizeObserver(() => { if (el.clientWidth !== last) { last = el.clientWidth; draw(); drawTrend(); } }).observe(el);
 }).catch((e) => {
   document.getElementById('chart').textContent = 'データを読み込めませんでした。';
   console.error(e);
