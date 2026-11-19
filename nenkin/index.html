@@ -99,15 +99,15 @@ footer{font-size:13px;color:var(--muted)}
   <section>
     <h3>2. 国が保障する最低限と比べても足りない</h3>
     <p>家計簿の金額は、平均的な暮らしの支出でした。では、国が生活保護で保障している最低限の水準と比べるとどうか。上の3本が最低限の額、下の3本が受け取っている年金です。</p>
-    <div class="chart" id="need" style="min-height:330px"></div>
+    <div class="chart" id="need" style="min-height:366px"></div>
     <ul class="legend">
       <li><span class="sw sw-living"></span>生活費(食費、光熱費など)</li>
       <li><span class="sw sw-rent"></span>家賃</li>
       <li><span class="sw" style="background:var(--c0)"></span>基礎年金</li>
       <li><span class="sw" style="background:var(--c1)"></span>厚生年金</li>
     </ul>
-    <p>東京23区で賃貸に暮らす場合、最低限の額は月 <b data-n="need_hi">—</b>万円で、基礎年金のみの人の平均とは <b data-n="gap_hi">—</b>万円の差があります。家賃のかからない持ち家でも、地方で月 <b data-n="own_lo">—</b>万円が必要で、<b data-n="gap_own">—</b>万円足りません。基礎年金は、40年間納めた満額でも月 <b data-n="kiso_full">—</b>万円です。</p>
-    <p class="muted">最低限の額は、生活保護の基準から出しています。食費や光熱費にあたる生活扶助と、家賃にあたる住宅扶助の上限の合計で、68歳の一人暮らしの場合です。医療費と介護費は別に保障されるため、含めていません。家賃は上限額で計算しているので、実際の家賃がそれより安ければ最低限の額も下がります。地方の家賃は青森県の町村の例で、地域によって上限は異なります。</p>
+    <p>東京23区で賃貸に暮らす場合、最低限の額は生活費 <b data-n="tk_living">—</b>万円と家賃 <b data-n="tk_rent">—</b>万円を合わせた月 <b data-n="need_hi">—</b>万円で、基礎年金のみの人の平均とは <b data-n="gap_hi">—</b>万円の差があります。家賃のかからない持ち家でも、地方で月 <b data-n="own_lo">—</b>万円が必要で、<b data-n="gap_own">—</b>万円足りません。基礎年金は、40年間納めた満額でも月 <b data-n="kiso_full">—</b>万円です。</p>
+    <p class="muted">最低限の額は、生活保護の基準から出しています。食費や光熱費にあたる生活扶助と、家賃にあたる住宅扶助の上限の合計で、68歳の一人暮らしの場合です。医療費と介護費は別に保障されるため、含めていません。家賃は、生活保護が家賃として出す上限額です。東京23区の一人暮らしで月 <b data-n="tk_rent">—</b>万円、青森県の町村で月 <b data-n="ru_rent">—</b>万円で、世間の家賃相場ではありません。東京23区の相場はこれより高いことが多く、保護を受ける人はこの上限に収まる部屋を探すことになります。実際の家賃が上限より安ければ、最低限の額も下がります。地方の家賃は青森県の町村の例で、地域によって上限は異なります。</p>
   </section>
 
   <section>
@@ -279,6 +279,7 @@ Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supp
   const spendTotal = d3.sum(kakei.filter((r) => r.kind === 'spend'), (r) => r.amount), outgoTotal = d3.sum(kakei, (r) => r.amount);
   const sup = Object.fromEntries(supports.map((r) => [r.id, r.value]));
   const paidBeforeEmpty = (income) => { const k = settle(income).ranOutAt; return k < 0 ? '' : kakei.slice(0, k + 1).map((r) => r.label.replace(/\(.*\)$/, '')).join('と'); };
+  const tk0 = thresholds.find((r) => r.id === 'tokyo'), ru0 = thresholds.find((r) => r.id === 'rural');
   const n = {
     kiso_total_man: comma(Math.round(kiso / 1e4)),
     kiso_under7_man: comma(Math.round(kisoUnder7 / 1e4)),
@@ -294,6 +295,7 @@ Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supp
     spend_man: man1(spendTotal), ran_out: paidBeforeEmpty(avg.kiso),
     outgo_man: man1(outgoTotal), gap_outgo: man1(outgoTotal - avg.kiso),
     other_income_pct: (100 - sup.pension_only).toFixed(1),
+    tk_living: man1(tk0.living), tk_rent: man1(tk0.rent), ru_rent: man1(ru0.rent),
     need_lo: man1(needLo), need_hi: man1(needHi), own_lo: man1(ownLo), own_hi: man1(ownHi),
     kiso_avg: man1(avg.kiso), kiso_full: man1(avg.kiso_full),
     gap_lo: man1(needLo - avg.kiso), gap_hi: man1(needHi - avg.kiso), gap_own: man1(ownLo - avg.kiso),
@@ -459,9 +461,9 @@ Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supp
   const nel = document.getElementById('need');
   const tk = thresholds.find((r) => r.id === 'tokyo'), ru = thresholds.find((r) => r.id === 'rural');
   const rowsNeed = [
-    {group: '国が保障する最低限の額', label: tk.label, parts: [{v: tk.living, cls: 'living'}, {v: tk.rent, cls: 'rent'}]},
-    {label: ru.label, parts: [{v: ru.living, cls: 'living'}, {v: ru.rent, cls: 'rent'}]},
-    {label: '地方の持ち家(家賃なし)', parts: [{v: ru.living, cls: 'living'}]},
+    {group: '国が保障する最低限の額', label: tk.label, parts: [{v: tk.living, cls: 'living', name: '生活費'}, {v: tk.rent, cls: 'rent', name: '家賃'}]},
+    {label: ru.label, parts: [{v: ru.living, cls: 'living', name: '生活費'}, {v: ru.rent, cls: 'rent', name: '家賃'}]},
+    {label: '地方の持ち家(家賃なし)', parts: [{v: ru.living, cls: 'living', name: '生活費'}]},
     {group: '受け取っている年金', label: '基礎年金のみの人の平均', parts: [{v: avg.kiso, cls: 'c0'}]},
     {label: '基礎年金の満額', parts: [{v: avg.kiso_full, cls: 'c0'}]},
     {label: '厚生年金の人の平均(基礎年金を含む)', parts: [{v: avg.kosei, cls: 'c1'}]}
@@ -469,7 +471,7 @@ Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supp
   const fills = {living: ['var(--fg)', 0.62], rent: ['var(--fg)', 0.28], c0: ['var(--c0)', 1], c1: ['var(--c1)', 1]};
   const drawNeed = () => {
     nel.replaceChildren();
-    const W = Math.max(280, nel.clientWidth), m = {l: 2, r: 64}, rowH = 44, groupH = 26;
+    const W = Math.max(280, nel.clientWidth), m = {l: 2, r: 64}, rowH = 50, groupH = 26;
     const x = d3.scaleLinear().domain([0, d3.max(rowsNeed, (r) => d3.sum(r.parts, (p) => p.v))]).range([m.l, W - m.r]);
     const H = rowsNeed.length * rowH + rowsNeed.filter((r) => r.group).length * groupH + 6;
     const svg = d3.select(nel).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('width', '100%').attr('role', 'img')
@@ -484,10 +486,13 @@ Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supp
       let x0 = m.l;
       r.parts.forEach((p) => {
         const w = x(p.v) - x(0);
-        svg.append('rect').attr('x', x0).attr('y', yy + 19).attr('width', w).attr('height', 16).style('fill', fills[p.cls][0]).style('opacity', fills[p.cls][1]);
+        svg.append('rect').attr('x', x0).attr('y', yy + 19).attr('width', w).attr('height', 22).style('fill', fills[p.cls][0]).style('opacity', fills[p.cls][1]);
+        // 内訳の金額を棒の中に書く(生活費と家賃がそれぞれいくらか)
+        if (p.name) svg.append('text').attr('x', x0 + 5).attr('y', yy + 34).style('font-size', '11px').style('font-weight', 600)
+          .style('fill', p.cls === 'living' ? 'var(--bg)' : 'var(--fg)').text(p.name + ' ' + man1(p.v) + '万');
         x0 += w;
       });
-      svg.append('text').attr('x', x0 + 6).attr('y', yy + 32).style('fill', 'var(--fg)').style('font-weight', 600).style('font-size', '14px')
+      svg.append('text').attr('x', x0 + 6).attr('y', yy + 35).style('fill', 'var(--fg)').style('font-weight', 600).style('font-size', '14px')
         .text(man1(d3.sum(r.parts, (p) => p.v)) + '万円');
       yy += rowH;
     });
