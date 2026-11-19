@@ -26,6 +26,26 @@
         "as_of": "2025年平均"
       },
       {
+        "name": "住宅・土地統計調査",
+        "publisher": "総務省統計局",
+        "url": "https://www.stat.go.jp/data/jyutaku/2023/pdf/kihon_gaiyou.pdf",
+        "frequency": "5年に1回",
+        "method": "手動",
+        "data": "高齢者のいる世帯と高齢単身世帯の、持ち家と借家の割合",
+        "file": "data/supports.json",
+        "as_of": "2023年"
+      },
+      {
+        "name": "国民生活基礎調査",
+        "publisher": "厚生労働省",
+        "url": "https://www.mhlw.go.jp/toukei/saikin/hw/k-tyosa/k-tyosa25/dl/03.pdf",
+        "frequency": "年1回(7月ごろ)",
+        "method": "手動",
+        "data": "高齢者世帯の所得の内訳、年金だけで暮らす世帯の割合、貯蓄、生活意識",
+        "file": "data/supports.json",
+        "as_of": "2025年調査"
+      },
+      {
         "name": "厚生年金保険・国民年金事業の概況",
         "publisher": "厚生労働省",
         "url": "https://www.mhlw.go.jp/content/001617995.pdf",
@@ -54,7 +74,18 @@
         "data": "年金を受けている被保護高齢者の割合、保護の申請件数と開始世帯数、京都市の相談件数と申請件数、保護基準未満の世帯に対する受給世帯の割合",
         "file": "data/reach.json",
         "as_of": "項目ごとに異なる"
+      },
+      {
+        "name": "将来推計(世帯数、年金額の分布)",
+        "publisher": "国立社会保障・人口問題研究所、厚生労働省",
+        "url": "https://www.ipss.go.jp/pp-ajsetai/j/HPRJ2024/t-page.asp",
+        "frequency": "5年に1回",
+        "method": "手動",
+        "data": "65歳以上の単独世帯数と未婚者の割合の推計、1974年度生まれの年金額の分布の推計",
+        "file": "data/outlook.json",
+        "as_of": "2024年公表の推計"
       }
-    ]
+    ],
+    "conclusion": "基礎年金だけでは暮らせません。食費と光熱費を払うと残らず、暮らせている人は、持ち家、配偶者の年金、仕事、貯蓄のどれかで補っています。"
   }
 ]

@@ -1,0 +1,13 @@
+[
+{"id": "own_home", "label": "高齢者のいる世帯のうち持ち家", "value": 81.6, "unit": "%", "period": "2023年", "source": "総務省 住宅・土地統計調査"},
+{"id": "rent_single", "label": "高齢単身世帯のうち借家", "value": 32.2, "unit": "%", "period": "2023年", "source": "総務省 住宅・土地統計調査"},
+{"id": "rent_single_osaka", "label": "大阪市の高齢単身世帯のうち借家", "value": 54.2, "unit": "%", "period": "2023年", "source": "大阪市 住宅・土地統計調査結果の概要"},
+{"id": "single_under5", "label": "配偶者のいない年金受給者のうち年金が月5万円未満", "value": 9.8, "unit": "%", "period": "令和4年調査", "source": "厚生労働省 年金制度基礎調査(記事の集計で確認)"},
+{"id": "pension_only", "label": "年金を受けている高齢者世帯のうち、所得が年金だけの世帯", "value": 41.3, "unit": "%", "period": "2025年調査", "source": "厚生労働省 国民生活基礎調査"},
+{"id": "work_share", "label": "高齢者世帯の所得に占める、働いて得た所得", "value": 25.9, "unit": "%", "period": "2024年の所得", "source": "厚生労働省 国民生活基礎調査"},
+{"id": "deficit", "label": "65歳以上の単身無職世帯の毎月の不足", "value": 29980, "unit": "円", "period": "2025年平均", "source": "総務省 家計調査"},
+{"id": "savings_avg", "label": "高齢者世帯の平均貯蓄額", "value": 1647.6, "unit": "万円", "period": "2025年6月末", "source": "厚生労働省 国民生活基礎調査"},
+{"id": "savings_none", "label": "高齢者世帯のうち貯蓄がない世帯", "value": 9.9, "unit": "%", "period": "2025年6月末", "source": "厚生労働省 国民生活基礎調査"},
+{"id": "hard", "label": "高齢者世帯のうち生活が苦しいと答えた世帯", "value": 52.1, "unit": "%", "period": "2025年7月", "source": "厚生労働省 国民生活基礎調査"},
+{"id": "very_hard", "label": "高齢者世帯のうち大変苦しいと答えた世帯", "value": 21.0, "unit": "%", "period": "2025年7月", "source": "厚生労働省 国民生活基礎調査"}
+]

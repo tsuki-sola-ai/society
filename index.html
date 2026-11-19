@@ -29,7 +29,7 @@ fetch('data/questions.json').then((r) => { if (!r.ok) throw new Error(r.status);
     const li = document.createElement('li');
     const a = document.createElement('a'); a.className = 'item'; a.href = q.url;
     const h = document.createElement('h2'); h.textContent = q.title;
-    const p = document.createElement('p'); p.className = 'muted'; p.textContent = q.summary;
+    const p = document.createElement('p'); p.textContent = q.conclusion;
     const v = document.createElement('p'); v.className = 'muted'; v.hidden = true;
     a.append(h, p, v); li.append(a);
     if (window.viewCount) window.viewCount(new URL(q.url, location.href).pathname).then((n) => { if (n) { v.textContent = n + ' 回閲覧'; v.hidden = false; } });

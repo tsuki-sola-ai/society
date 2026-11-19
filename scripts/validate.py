@@ -56,6 +56,24 @@ for kind, total in KAKEI_PUBLISHED.items():
     check(abs(got - total) <= 5, f"kakei: {kind} の合計 {got:,} が公表値 {total:,} と不一致")
 check(all(row["amount"] > 0 and row.get("label") for row in kakei), "kakei: 金額か表示名が欠けている費目がある")
 
+# 暮らせている理由の数字: 必要な項目が揃い、割合は0〜100に収まること
+supports = {row["id"]: row for row in load("supports.json")}
+for key in ["own_home", "rent_single", "rent_single_osaka", "single_under5", "pension_only", "work_share",
+            "deficit", "savings_avg", "savings_none", "hard", "very_hard"]:
+    check(key in supports, f"supports: {key} がない")
+for row in supports.values():
+    if row["unit"] == "%":
+        check(0 < row["value"] < 100, f"supports: {row['id']} の割合 {row['value']} が範囲外")
+if "deficit" in supports:
+    spend = sum(r["amount"] for r in kakei if r["kind"] == "spend")
+    check(20_000 < supports["deficit"]["value"] < spend, "supports: 毎月の不足が想定範囲外")
+
+# 今後の見通し: 実績か推計かの区別と出典が、すべての行に付いていること
+outlook = load("outlook.json")
+for row in outlook:
+    check(row.get("kind") in ("実績", "推計"), f"outlook: {row.get('id')} に 実績/推計 の区別がない")
+    check(bool(row.get("source")) and bool(row.get("period")), f"outlook: {row.get('id')} に出典か時点がない")
+
 # 受給実態: 月次更新される3項目の整合
 reach = {row["id"]: row for row in load("reach.json")}
 for key in ["elderly_households", "elderly_share", "elderly_single", "pension_rate",
@@ -104,7 +122,7 @@ questions = load("questions.json")
 check(bool(questions), "questions: 問いが1つもない")
 indicators = {r["indicator"] for r in obs}
 for q in questions:
-    for key in ["id", "title", "summary", "url", "sources"]:
+    for key in ["id", "title", "conclusion", "summary", "url", "sources"]:
         check(bool(q.get(key)), f"questions: {q.get('id')} に {key} がない")
     check((ROOT / q.get("url", "") / "index.html").is_file(), f"questions: {q.get('url')} のページがない")
     for s in q.get("sources", []):
