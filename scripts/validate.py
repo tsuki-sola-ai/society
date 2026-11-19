@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""data/*.json の検算。おかしな数字がサイトに出る前に止めるためのもの。
+"""data/ 以下の検算。おかしな数字がサイトに出る前に止めるためのもの。
 失敗すると終了コード1で終わり、ワークフローはコミットせずに止まる。"""
 import json
 import sys
@@ -74,6 +74,25 @@ if not errors:
         period, value = latest.get(indicator, ("", None))
         check(period == reach[rid].get("as_of") and value == reach[rid]["raw"],
               f"observations: {indicator} の最新値がページの数字と一致しない")
+
+# 問いの台帳: 一覧と管理ページの元になる。ページとデータファイルが実在すること
+ROOT = DATA.parent
+questions = load("questions.json")
+check(bool(questions), "questions: 問いが1つもない")
+indicators = {r["indicator"] for r in obs}
+for q in questions:
+    for key in ["id", "title", "summary", "url", "sources"]:
+        check(bool(q.get(key)), f"questions: {q.get('id')} に {key} がない")
+    check((ROOT / q.get("url", "") / "index.html").is_file(), f"questions: {q.get('url')} のページがない")
+    for s in q.get("sources", []):
+        for key in ["name", "publisher", "url", "frequency", "method", "data", "file"]:
+            check(bool(s.get(key)), f"questions: {q.get('id')} の取得先 {s.get('name')} に {key} がない")
+        check(s.get("method") in ("自動", "手動"), f"questions: 取得方法は 自動 か 手動 ({s.get('name')})")
+        check((ROOT / s.get("file", "")).is_file(), f"questions: {s.get('file')} がない")
+        if s.get("method") == "自動":
+            check(s.get("indicator") in indicators, f"questions: 自動取得の指標 {s.get('indicator')} が observations.csv にない")
+        else:
+            check(bool(s.get("as_of")), f"questions: 手動の取得先 {s.get('name')} に as_of(手元の時点)がない")
 
 if errors:
     print("検算に失敗しました:")

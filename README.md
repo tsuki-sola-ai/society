@@ -6,14 +6,19 @@
 
 ## いまあるもの
 
-- **年金だけで暮らせるのか** (`index.html`)
-  年金月額の分布に生活扶助の目安を重ね、生活保護が実際に届いているかを数字で見る。
+- **問いの一覧** (`index.html`): トップページ。問いを並べた目次
+- **年金だけで暮らせるのか** (`nenkin/`): 年金月額の分布に生活扶助の目安を重ね、生活保護が実際に届いているかを数字で見る
+- **データの管理状況** (`kanri/`): 問いごとの取得先、頻度、取得方法、主なデータ、手元の最新時点の一覧
 
 ## 構成
 
 | 場所 | 中身 |
 |---|---|
-| `index.html` | ページ本体。ビルド不要の静的HTML。`data/` のJSONを読んで描画する |
+| `index.html` | 問いの一覧。`data/questions.json` を読んで並べる |
+| `nenkin/index.html` | 問いのページ。ビルド不要の静的HTMLで、`data/` を読んで描画する |
+| `kanri/index.html` | 管理用の一覧。`data/questions.json` と `data/observations.csv` から作る |
+| `assets/base.css` | 一覧と管理ページの共通スタイル |
+| `data/questions.json` | 問いの台帳。問いごとの取得先、頻度、取得方法、主なデータ |
 | `data/pension.json` | 年金月額階級別の受給権者数(年1回、手動更新) |
 | `data/thresholds.json` | 生活扶助基準額の例(制度改定時に手動更新) |
 | `data/reach.json` | 受給実態の数字。高齢者世帯の3項目だけ毎月自動更新 |
@@ -21,6 +26,12 @@
 | `scripts/fetch_hihogosya.py` | 被保護者調査の月次PDFから高齢者世帯の数字を取り込む |
 | `scripts/validate.py` | 検算。通らないデータは反映しない |
 | `.github/workflows/update-data.yml` | 毎月8日に取得→検算→コミット。手動実行もできる |
+
+## 問いを足すとき
+
+1. `新しいフォルダ/index.html` に問いのページを作る
+2. `data/questions.json` に、問いと取得先を1件足す
+3. 一覧と管理ページには自動で載る。`scripts/validate.py` が台帳の抜けを検査する
 
 ## データの更新
 

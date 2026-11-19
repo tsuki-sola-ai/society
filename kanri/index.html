@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>データの管理状況</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<main class="wide">
+  <header>
+    <nav class="muted"><a href="../">← 問いの一覧</a></nav>
+    <h1>データの管理状況</h1>
+    <p class="lead">それぞれの問いが、どこから、どの頻度で、何のデータを取っているかの一覧です。</p>
+  </header>
+
+  <section>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>問いと閲覧URL</th><th>データ取得先</th><th>頻度</th><th>取得方法</th><th>主な取得データ</th><th>手元の最新</th><th>保存先</th></tr>
+        </thead>
+        <tbody id="rows"><tr><td colspan="7" class="muted">読み込み中…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <p class="muted">「自動」は、毎月8日にGitHub Actionsが取得し、検算に通ったものだけを反映します。実行の履歴と結果は <a href="https://github.com/tsuki-sola-ai/society/actions">Actionsの画面</a> で確認できます。「手動」は、新しい資料が出たときにファイルを書き換えます。「手元の最新」は、このサイトが持っているデータの時点で、取得先にそれより新しいものが出ている場合があります。</p>
+  </section>
+
+  <footer><a href="../">問いの一覧</a> ・ <a href="https://github.com/tsuki-sola-ai/society">GitHub</a></footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script>
+const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
+const link = (text, href) => { const a = el('a', text); a.href = href; return a; };
+const jp = (period) => { const [y, m] = period.split('-').map(Number); return '令和' + (y - 2018) + '年' + m + '月分'; };
+const get = (path) => fetch('../' + path, {cache: 'no-cache'}).then((r) => { if (!r.ok) throw new Error(path); return r; });
+
+Promise.all([get('data/questions.json').then((r) => r.json()), get('data/observations.csv').then((r) => r.text()).then((t) => d3.csvParse(t))]).then(([questions, obs]) => {
+  const latest = (indicator) => {
+    const rows = obs.filter((r) => r.indicator === indicator).sort((a, b) => d3.ascending(a.period, b.period));
+    return rows.length ? rows[rows.length - 1] : null;
+  };
+  const body = document.getElementById('rows');
+  body.replaceChildren();
+  questions.forEach((q) => {
+    q.sources.forEach((s, i) => {
+      const tr = document.createElement('tr');
+      if (i === 0) {
+        const td = el('td'); td.rowSpan = q.sources.length;
+        const pageUrl = new URL('../' + q.url, location.href).href;
+        td.append(link(q.title, pageUrl), el('div', pageUrl.replace(/^https?:\/\//, ''), 'muted'));
+        tr.append(td);
+      }
+      const src = el('td');
+      src.append(link(s.name, /^https?:/.test(s.url) ? s.url : '../' + s.url), el('div', s.publisher, 'muted'));
+      const how = el('td', null, 'nowrap');
+      how.append(el('span', s.method, 'tag ' + (s.method === '自動' ? 'auto' : 'manual')));
+      const now = el('td', null, 'nowrap');
+      const row = s.indicator ? latest(s.indicator) : null;
+      if (row) now.append(el('div', jp(row.period)), el('div', row.fetched_at + ' に取得', 'muted'));
+      else now.textContent = s.as_of || '—';
+      const file = el('td', null, 'nowrap');
+      file.append(link(s.file, 'https://github.com/tsuki-sola-ai/society/blob/main/' + s.file));
+      tr.append(src, el('td', s.frequency, 'nowrap'), how, el('td', s.data), now, file);
+      body.append(tr);
+    });
+  });
+}).catch(() => {
+  document.getElementById('rows').innerHTML = '<tr><td colspan="7" class="muted">一覧を読み込めませんでした。</td></tr>';
+});
+</script>
+</body>
+</html>

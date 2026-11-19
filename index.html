@@ -3,251 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>年金だけで暮らせるのか</title>
-<meta name="description" content="年金月額の分布と生活扶助の目安、生活保護が実際に届いているかを、公的統計で見る。">
-<style>
-:root{--fg:#1f1e1b;--muted:#6b6962;--bg:#fbfaf7;--panel:#f3f1ea;--line:#dedbd1;--grid:#e8e5dc;--axis:#b9b5a8;--band:#8a867a;--c0:#c2603f;--c1:#4f7fbf;--pop:#fff}
-@media (prefers-color-scheme:dark){:root{--fg:#ecebe6;--muted:#a3a096;--bg:#1b1a18;--panel:#252421;--line:#3a3833;--grid:#2e2c28;--axis:#5c5950;--band:#a09c8f;--c0:#e0825f;--c1:#7fa8e0;--pop:#2b2a26}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic UI",system-ui,sans-serif;font-size:16px;line-height:1.8}
-main{max-width:760px;margin:0 auto;padding:32px 20px 64px;display:flex;flex-direction:column;gap:40px}
-h1{font-family:"Hiragino Mincho ProN","Noto Serif JP","Yu Mincho",serif;font-weight:400;font-size:32px;line-height:1.3;margin:0}
-h2{font-size:19px;font-weight:600;line-height:1.5;margin:0}
-p{margin:0}
-section{display:flex;flex-direction:column;gap:12px}
-.lead{font-size:19px;line-height:1.7;margin-top:12px}
-b{font-variant-numeric:tabular-nums}
-.muted{color:var(--muted);font-size:13px;line-height:1.7}
-.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--muted);margin:0;padding:0;list-style:none}
-.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
-.chart{position:relative;min-height:300px}
-.chart svg{display:block;overflow:visible}
-.chart text{fill:var(--muted);font-size:12px}
-.tip{position:absolute;pointer-events:none;background:var(--pop);border:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.15);border-radius:6px;padding:6px 9px;font-size:13px;line-height:1.5;white-space:nowrap;font-variant-numeric:tabular-nums;display:none}
-.tip span{color:var(--muted)}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:4px}
-.card h3{font-size:13px;font-weight:400;color:var(--muted);margin:0;line-height:1.5}
-.big{font-family:"Hiragino Mincho ProN","Noto Serif JP","Yu Mincho",serif;font-size:32px;line-height:1.2;font-variant-numeric:tabular-nums}
-.big small{font-family:inherit;font-size:15px;margin-left:2px}
-details{font-size:13px;color:var(--muted);line-height:1.8}
-summary{cursor:pointer;color:var(--fg)}
-details ul{margin:8px 0 0;padding-left:1.2em}
-a{color:inherit}
-footer{font-size:13px;color:var(--muted)}
-</style>
+<title>暮らしの疑問を、公的統計で確かめる</title>
+<meta name="description" content="暮らしの中の素朴な疑問を、公的統計の数字で確かめるサイト。">
+<link rel="stylesheet" href="assets/base.css">
 </head>
 <body>
 <main>
   <header>
-    <h1>年金だけで暮らせるのか</h1>
-    <p class="lead">基礎年金だけを受け取っている <b data-n="kiso_total_man">—</b>万人のうち、<b data-n="kiso_under7_pct">—</b>%は年金が月7万円に届きません。一人暮らしの高齢者に国が定める生活費の目安と、ほぼ同じかそれ未満の水準です。</p>
+    <h1>暮らしの疑問を、公的統計で確かめる</h1>
+    <p class="lead">暮らしの中でふと浮かぶ疑問を一つずつ取り上げ、国が公表している統計で確かめます。数字はすべて出典を示し、更新できるものは自動で最新にしています。</p>
   </header>
 
   <section>
-    <h2>基礎年金のみの人は、ほぼ全員が生活費の目安の手前にいる</h2>
-    <p>棒は、年金の月額ごとの人数です。帯は、68歳の一人暮らしに対する生活扶助(生活保護のうち食費や光熱費にあたる部分)の例で、地方の <b data-n="thr_rural">—</b>円から東京都区部の <b data-n="thr_tokyo">—</b>円までの幅を示します。家賃と医療費は含みません。</p>
-    <ul class="legend">
-      <li><span class="sw" style="background:var(--c0)"></span>基礎年金のみ</li>
-      <li><span class="sw" style="background:var(--c1)"></span>厚生年金(基礎年金を含む)</li>
-      <li><span class="sw" style="background:var(--band);opacity:.45"></span>生活扶助の例(68歳・単身)</li>
-    </ul>
-    <div class="chart" id="chart"></div>
-    <p>基礎年金のみの人は <b data-n="kiso_under7_man">—</b>万人が月7万円未満で、その <b data-n="kiso_women_pct">—</b>%は女性です。厚生年金を受け取る <b data-n="kosei_total_man">—</b>万人では、月8万円未満は <b data-n="kosei_under8_man">—</b>万人(<b data-n="kosei_under8_pct">—</b>%)にとどまります。</p>
-    <p class="muted">ここでは、あえて一人ひとりの年金額で見ています。憲法25条が保障する最低限度の生活は個人の権利であり、一人で暮らすことになったときに自分の年金で届くかどうかを示すためです。帯より左にいる人には、配偶者の年金や仕事の収入、貯蓄と合わせて暮らしている人も含まれ、全員が今困窮しているわけではありません。ただ、死別や離別でその支えがなくなれば、自分の年金だけでは目安に届かなくなります。なお、生活保護を受けられるかどうかは、個人ではなく世帯単位で判定されます。年金額は令和6年度末、生活扶助は令和8年10月の水準で、その間に年金は約4%引き上げられています。</p>
+    <ul class="list" id="questions"><li class="muted">読み込み中…</li></ul>
   </section>
 
-  <section>
-    <h2>足りない分は生活保護で埋められる。実際に届いているか</h2>
-    <p>年金と生活保護は同時に受けられ、最低生活費に足りない差額が支給されます。下は、その仕組みがどこまで届いているかを示す数字です。</p>
-    <div class="cards">
-      <div class="card">
-        <h3>生活保護を受けている高齢者世帯</h3>
-        <div class="big"><span data-r="elderly_households">—</span><small>万世帯</small></div>
-        <p class="muted">保護を受ける世帯全体の <b data-r="elderly_share">—</b>%。うち <b data-r="elderly_single">—</b>万世帯が単身。<span data-period="elderly_households"></span></p>
-      </div>
-      <div class="card">
-        <h3>保護を受ける高齢者のうち、年金も受けている人</h3>
-        <div class="big"><span data-r="pension_rate">—</span><small>%</small></div>
-        <p class="muted">年金と保護の併用は例外ではなく、多数派。2020年度。</p>
-      </div>
-      <div class="card">
-        <h3>申請した人のうち、保護が始まった割合</h3>
-        <div class="big"><span data-n="start_pct">—</span><small>%</small></div>
-        <p class="muted">申請 <b data-r="applications_2024">—</b>万件に対し、開始 <b data-r="starts_2024">—</b>万世帯。2024年。</p>
-      </div>
-      <div class="card">
-        <h3>窓口に相談した人のうち、申請に進んだ割合(京都市の例)</h3>
-        <div class="big"><span data-n="kyoto_pct">—</span><small>%</small></div>
-        <p class="muted">相談 <b data-r="kyoto_consult">—</b>件に対し、申請 <b data-r="kyoto_apply">—</b>件。全国の相談件数は公表されていません。</p>
-      </div>
-      <div class="card">
-        <h3>所得が保護基準に満たない世帯のうち、保護を受けている割合</h3>
-        <div class="big"><span data-r="ratio_income">—</span><small>%</small></div>
-        <p class="muted">預貯金がほとんどない世帯に絞ると <b data-r="ratio_asset">—</b>%。厚生労働省の推計、2016年のデータ。</p>
-      </div>
-    </div>
-    <p>申請まで進めば9割近くが受給に至ります。一方で、相談から申請に進む人は京都市の例で3割ほどです。相談した人には、対象外の人や情報を集めに来ただけの人も含まれるので、残りがすべて断られたわけではありません。ただ、窓口で申請に至らなかった人の数を国は集計しておらず、ここが一番見えない部分です。</p>
-  </section>
-
-  <section>
-    <h2>生活保護を受ける高齢者世帯の推移</h2>
-    <p>最新の <b data-t="period">—</b>は <b data-t="latest">—</b>万世帯で、前年の同じ月と比べて <b data-t="diff">—</b>世帯(<b data-t="pct">—</b>%)です。</p>
-    <div class="chart" id="trend"></div>
-    <p class="muted">縦軸は0から始まっていません。変化を見やすくするために範囲を絞っているので、実際の増減は全体の1〜2%ほどです。毎年3月に1万世帯前後の段差がありますが、原因は確認できていません。月ごとの上下ではなく、前年の同じ月との比較で読んでください。数字は毎月の概数で、あとから確定値で訂正されることがあります。</p>
-  </section>
-
-  <details>
-    <summary>出典と、数字の読み方の注意</summary>
-    <ul>
-      <li>年金月額の分布: <a href="https://www.mhlw.go.jp/content/001617995.pdf">厚生労働省「令和6年度 厚生年金保険・国民年金事業の概況」</a>参考資料3・4。「基礎年金のみ」は、厚生年金と共済の加入期間がない老齢基礎年金の受給権者と、旧国民年金の受給権者。厚生年金は民間企業の加入者(第1号)で、金額に基礎年金を含みます。公務員などの共済は入っていません。基礎年金のみの「7万円以上」は、7〜8万円の位置にまとめて描いています。</li>
-      <li>生活扶助の例: <a href="https://www.mhlw.go.jp/content/001152601.pdf">厚生労働省「生活扶助基準額の算出方法」</a>と、同省が公表している世帯類型別の例(高齢者単身世帯・68歳、令和8年10月)。例の金額は二次情報で確認しました。75歳以上はこれよりやや低く、賃貸の場合は地域ごとの上限内で家賃分が別に加わります。</li>
-      <li>高齢者世帯の数: 厚生労働省「被保護者調査」月次概数。毎月自動で取り込み、検算に通ったものだけを反映しています。</li>
-      <li>年金を受けている被保護高齢者の割合: <a href="https://oisr-org.ws.hosei.ac.jp/images/oz/contents/ohara_787_p16.pdf">大原社会問題研究所雑誌 787号</a>(被保護者調査に基づく)。</li>
-      <li>申請件数と保護開始世帯数: 被保護者調査の2024年分を、<a href="https://www.newsweekjapan.jp/articles/-/16014">ニューズウィーク日本版の記事</a>の集計で確認。</li>
-      <li>京都市の相談件数と申請件数: <a href="https://gentosha-go.com/articles/-/51542">書籍の抜粋記事</a>による。対象年度は出典を参照してください。</li>
-      <li>保護基準未満の世帯に対する割合: 厚生労働省が2018年5月に国会へ提出した推計を、<a href="https://www.jcp.or.jp/akahata/aik18/2018-06-03/2018060301_03_1.html">しんぶん赤旗の報道</a>で確認。同省はこの数字を「捕捉率」とは呼んでおらず、申請の意思がない世帯も含むこと、資産の把握が完全ではないことを留保しています。2010年の最初の推計は<a href="https://www.mhlw.go.jp/stf/houdou/2r9852000000378g-img/2r985200000037ce.pdf">こちら</a>。</li>
-    </ul>
-  </details>
-
-  <footer>データと取得コードは <a href="https://github.com/tsuki-sola-ai/society">GitHub</a> で公開しています。数字の誤りに気づいた方は、Issueでお知らせください。</footer>
+  <footer><a href="kanri/">データの管理状況</a> ・ データと取得コードは <a href="https://github.com/tsuki-sola-ai/society">GitHub</a> で公開しています。</footer>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script>
-const comma = d3.format(',');
-const load = (name) => fetch('data/' + name + '.json', {cache: 'no-cache'}).then((r) => { if (!r.ok) throw new Error(name); return r.json(); });
-
-const loadObs = () => fetch('data/observations.csv', {cache: 'no-cache'}).then((r) => { if (!r.ok) throw new Error('observations'); return r.text(); }).then((t) => d3.csvParse(t));
-
-Promise.all([...['pension', 'thresholds', 'reach'].map(load), loadObs()]).then(([pension, thresholds, reach, obs]) => {
-  const total = (pick, below) => d3.sum(pension.filter((r) => below == null || r.low < below), pick);
-  const kiso = total((r) => r.kiso), kisoUnder7 = total((r) => r.kiso, 7), kisoWomen = total((r) => r.kiso_f);
-  const kosei = total((r) => r.kosei), koseiUnder8 = total((r) => r.kosei, 8);
-  const byId = Object.fromEntries(reach.map((r) => [r.id, r]));
-  const thr = Object.fromEntries(thresholds.map((r) => [r.id, r.amount]));
-  const n = {
-    kiso_total_man: comma(Math.round(kiso / 1e4)),
-    kiso_under7_man: comma(Math.round(kisoUnder7 / 1e4)),
-    kiso_under7_pct: Math.round(kisoUnder7 / kiso * 100),
-    kiso_women_pct: Math.round(kisoWomen / kiso * 100),
-    kosei_total_man: comma(Math.round(kosei / 1e4)),
-    kosei_under8_man: comma(Math.round(koseiUnder8 / 1e4)),
-    kosei_under8_pct: (koseiUnder8 / kosei * 100).toFixed(1),
-    thr_rural: comma(thr.rural),
-    thr_tokyo: comma(thr.tokyo),
-    start_pct: (byId.starts_2024.raw / byId.applications_2024.raw * 100).toFixed(1),
-    kyoto_pct: (byId.kyoto_apply.raw / byId.kyoto_consult.raw * 100).toFixed(1)
-  };
-  document.querySelectorAll('[data-n]').forEach((el) => { el.textContent = n[el.dataset.n] ?? '—'; });
-  document.querySelectorAll('[data-r]').forEach((el) => { const row = byId[el.dataset.r]; el.textContent = row ? comma(row.value) : '—'; });
-  document.querySelectorAll('[data-period]').forEach((el) => { const row = byId[el.dataset.period]; el.textContent = row ? row.period + '。' : ''; });
-
-  const el = document.getElementById('chart');
-  const draw = () => {
-    const bins = pension.length, lo = thr.rural / 1e4, hi = thr.tokyo / 1e4;
-    const W = Math.max(280, el.clientWidth), H = 300, m = {t: 30, r: 6, b: 40, l: 38};
-    const x = d3.scaleLinear().domain([0, bins]).range([m.l, W - m.r]);
-    const y = d3.scaleLinear().domain([0, d3.max(pension, (r) => r.kiso + r.kosei) / 1e4]).nice().range([H - m.b, m.t]);
-    const bw = Math.max(1, x(1) - x(0) - 1.5);
-    el.replaceChildren();
-    const svg = d3.select(el).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('width', '100%').attr('role', 'img')
-      .attr('aria-label', '年金月額ごとの受給権者数の棒グラフ。基礎年金のみの人は月7万円未満に集中し、厚生年金の人は月10万円から20万円に広く分布する。生活扶助の例は月7.0万円から7.8万円。');
-    y.ticks(4).forEach((v) => {
-      svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(v)).attr('y2', y(v)).style('stroke', 'var(--grid)');
-      svg.append('text').attr('x', m.l - 6).attr('y', y(v)).attr('dy', '0.32em').attr('text-anchor', 'end').text(v);
-    });
-    svg.append('rect').attr('x', x(lo)).attr('width', Math.max(2, x(hi) - x(lo))).attr('y', m.t - 6).attr('height', H - m.b - m.t + 6).style('fill', 'var(--band)').style('opacity', 0.35);
-    pension.forEach((r) => {
-      const a = r.kiso / 1e4, b = r.kosei / 1e4, x0 = x(r.low) + 0.75;
-      svg.append('rect').attr('x', x0).attr('width', bw).attr('y', y(a)).attr('height', y(0) - y(a)).style('fill', 'var(--c0)');
-      svg.append('rect').attr('x', x0).attr('width', bw).attr('y', y(a + b)).attr('height', y(a) - y(a + b)).style('fill', 'var(--c1)');
-    });
-    svg.append('text').attr('x', m.l - 6).attr('y', m.t - 16).attr('text-anchor', 'end').text('万人');
-    d3.range(0, bins, W < 420 ? 10 : 5).forEach((v) => {
-      svg.append('text').attr('x', x(v)).attr('y', H - m.b + 16).attr('text-anchor', v === 0 ? 'start' : 'middle').text(v);
-    });
-    svg.append('text').attr('x', W - m.r).attr('y', H - 6).attr('text-anchor', 'end').text('年金月額(万円)');
-    svg.append('text').attr('x', x(hi) + 4).attr('y', m.t - 12).text('生活扶助の例');
-    svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(0)).attr('y2', y(0)).style('stroke', 'var(--axis)');
-
-    const tip = d3.select(el).append('div').attr('class', 'tip');
-    const man = d3.format(',.1f');
-    const show = (event, r) => {
-      tip.style('display', 'block').text('');
-      tip.append('div').text(r.label);
-      const a = tip.append('div'); a.append('span').text('基礎年金のみ '); a.append('b').text(man(r.kiso / 1e4) + '万人');
-      const b = tip.append('div'); b.append('span').text('厚生年金 '); b.append('b').text(man(r.kosei / 1e4) + '万人');
-      const box = el.getBoundingClientRect(), tw = tip.node().offsetWidth, th = tip.node().offsetHeight;
-      tip.style('left', Math.max(0, Math.min(box.width - tw, event.clientX - box.left + 10)) + 'px').style('top', Math.max(0, event.clientY - box.top - th - 10) + 'px');
-    };
-    pension.forEach((r) => {
-      svg.append('rect').attr('x', x(r.low)).attr('width', x(1) - x(0)).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
-        .on('pointerenter pointermove pointerdown', (event) => show(event, r))
-        .on('pointerleave', () => tip.style('display', 'none'));
-    });
-  };
-  // 高齢者世帯数の推移(全国、月次)
-  const series = obs.filter((r) => r.indicator === 'hihogo.elderly_households' && r.area === '00000')
-    .map((r) => ({period: r.period, date: new Date(r.period + '-01T00:00:00Z'), value: +r.value}))
-    .sort((a, b) => d3.ascending(a.period, b.period));
-  const jp = (period) => { const [y, m] = period.split('-').map(Number); return '令和' + (y - 2018) + '年' + m + '月'; };
-  const signed = d3.format('+,');
-  if (series.length) {
-    const lastPt = series[series.length - 1];
-    const [ly, lm] = lastPt.period.split('-');
-    const prev = series.find((d) => d.period === (ly - 1) + '-' + lm);
-    const t = {period: jp(lastPt.period), latest: (lastPt.value / 1e4).toFixed(1),
-      diff: prev ? signed(lastPt.value - prev.value) : '—',
-      pct: prev ? d3.format('+.1f')((lastPt.value / prev.value - 1) * 100) : '—'};
-    document.querySelectorAll('[data-t]').forEach((e) => { e.textContent = t[e.dataset.t]; });
-  }
-  const tel = document.getElementById('trend');
-  const drawTrend = () => {
-    tel.replaceChildren();
-    if (series.length < 2) { tel.textContent = '推移を描けるだけのデータがまだありません。'; return; }
-    const W = Math.max(280, tel.clientWidth), H = 260, m = {t: 24, r: 14, b: 32, l: 44};
-    const x = d3.scaleUtc().domain(d3.extent(series, (d) => d.date)).range([m.l, W - m.r]);
-    const y = d3.scaleLinear().domain(d3.extent(series, (d) => d.value / 1e4)).nice(4).range([H - m.b, m.t]);
-    const svg = d3.select(tel).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('width', '100%').attr('role', 'img')
-      .attr('aria-label', '生活保護を受けている高齢者世帯数の月ごとの推移を示す折れ線グラフ。' + jp(series[0].period) + 'から' + jp(series[series.length - 1].period) + 'まで。');
-    y.ticks(4).forEach((v) => {
-      svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(v)).attr('y2', y(v)).style('stroke', 'var(--grid)');
-      svg.append('text').attr('x', m.l - 6).attr('y', y(v)).attr('dy', '0.32em').attr('text-anchor', 'end').text(v.toFixed(1));
-    });
-    svg.append('text').attr('x', m.l - 6).attr('y', m.t - 12).attr('text-anchor', 'end').text('万世帯');
-    const years = d3.utcYear.range(d3.utcYear.ceil(series[0].date), d3.utcDay.offset(series[series.length - 1].date, 1));
-    years.forEach((d) => {
-      svg.append('line').attr('x1', x(d)).attr('x2', x(d)).attr('y1', H - m.b).attr('y2', H - m.b + 5).style('stroke', 'var(--axis)');
-      svg.append('text').attr('x', x(d)).attr('y', H - m.b + 19).attr('text-anchor', 'middle').text(d.getUTCFullYear() + '年');
-    });
-    svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', H - m.b).attr('y2', H - m.b).style('stroke', 'var(--axis)');
-    svg.append('path').attr('d', d3.line().x((d) => x(d.date)).y((d) => y(d.value / 1e4))(series)).style('fill', 'none').style('stroke', 'var(--c0)').style('stroke-width', 2);
-    const dot = svg.append('circle').attr('r', 4).style('fill', 'var(--c0)').style('display', 'none');
-    const tip = d3.select(tel).append('div').attr('class', 'tip');
-    const move = (event) => {
-      const box = tel.getBoundingClientRect();
-      const px = (event.clientX - box.left) * (W / box.width);
-      const d = series[d3.leastIndex(series, (a, b) => Math.abs(x(a.date) - px) - Math.abs(x(b.date) - px))];
-      dot.style('display', null).attr('cx', x(d.date)).attr('cy', y(d.value / 1e4));
-      tip.style('display', 'block').text('');
-      tip.append('div').text(jp(d.period));
-      tip.append('div').append('b').text(comma(d.value) + '世帯');
-      const tw = tip.node().offsetWidth, th = tip.node().offsetHeight;
-      tip.style('left', Math.max(0, Math.min(box.width - tw, event.clientX - box.left + 10)) + 'px').style('top', Math.max(0, event.clientY - box.top - th - 10) + 'px');
-    };
-    svg.append('rect').attr('x', m.l).attr('width', W - m.l - m.r).attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
-      .on('pointerenter pointermove pointerdown', move)
-      .on('pointerleave', () => { tip.style('display', 'none'); dot.style('display', 'none'); });
-  };
-
-  draw();
-  drawTrend();
-  let last = el.clientWidth;
-  new ResizeObserver(() => { if (el.clientWidth !== last) { last = el.clientWidth; draw(); drawTrend(); } }).observe(el);
-}).catch((e) => {
-  document.getElementById('chart').textContent = 'データを読み込めませんでした。';
-  console.error(e);
+fetch('data/questions.json', {cache: 'no-cache'}).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then((questions) => {
+  const list = document.getElementById('questions');
+  list.replaceChildren(...questions.map((q) => {
+    const li = document.createElement('li');
+    const a = document.createElement('a'); a.className = 'item'; a.href = q.url;
+    const h = document.createElement('h2'); h.textContent = q.title;
+    const p = document.createElement('p'); p.className = 'muted'; p.textContent = q.summary;
+    a.append(h, p); li.append(a);
+    return li;
+  }));
+}).catch(() => {
+  document.getElementById('questions').innerHTML = '<li class="muted">一覧を読み込めませんでした。</li>';
 });
 </script>
 </body>

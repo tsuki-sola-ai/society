@@ -1,0 +1,50 @@
+[
+  {
+    "id": "nenkin",
+    "title": "年金だけで暮らせるのか",
+    "summary": "年金の月額の分布を、一人暮らしの高齢者の生活費の目安と比べます。足りない分を埋めるはずの生活保護が、実際に届いているかも見ます。",
+    "url": "nenkin/",
+    "sources": [
+      {
+        "name": "被保護者調査(月次概数)",
+        "publisher": "厚生労働省",
+        "url": "https://www.mhlw.go.jp/toukei/list/74-16.html",
+        "frequency": "毎月",
+        "method": "自動",
+        "data": "生活保護を受けている高齢者世帯数、被保護世帯に占める割合、うち単身世帯数",
+        "file": "data/observations.csv",
+        "indicator": "hihogo.elderly_households"
+      },
+      {
+        "name": "厚生年金保険・国民年金事業の概況",
+        "publisher": "厚生労働省",
+        "url": "https://www.mhlw.go.jp/content/001617995.pdf",
+        "frequency": "年1回(12月ごろ)",
+        "method": "手動",
+        "data": "年金月額階級別の受給権者数(基礎年金のみ、厚生年金)",
+        "file": "data/pension.json",
+        "as_of": "令和6年度末"
+      },
+      {
+        "name": "生活扶助基準額",
+        "publisher": "厚生労働省",
+        "url": "https://www.mhlw.go.jp/content/001152601.pdf",
+        "frequency": "制度改定時",
+        "method": "手動",
+        "data": "高齢者単身世帯(68歳)の生活扶助基準額の例",
+        "file": "data/thresholds.json",
+        "as_of": "令和8年10月"
+      },
+      {
+        "name": "推計や事例(論文、報道、書籍で確認したもの)",
+        "publisher": "各出典",
+        "url": "nenkin/#notes",
+        "frequency": "新しい資料が出たとき",
+        "method": "手動",
+        "data": "年金を受けている被保護高齢者の割合、保護の申請件数と開始世帯数、京都市の相談件数と申請件数、保護基準未満の世帯に対する受給世帯の割合",
+        "file": "data/reach.json",
+        "as_of": "項目ごとに異なる"
+      }
+    ]
+  }
+]
