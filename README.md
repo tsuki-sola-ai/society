@@ -18,6 +18,7 @@
 | `nenkin/index.html` | 問いのページ。ビルド不要の静的HTMLで、`data/` を読んで描画する |
 | `kanri/index.html` | 管理用の一覧。`data/questions.json` と `data/observations.csv` から作る |
 | `assets/base.css` | 一覧と管理ページの共通スタイル |
+| `assets/views.js` | 閲覧数の表示。集計は GoatCounter(クッキーなし)。管理ページは計測していない |
 | `data/questions.json` | 問いの台帳。問いごとの取得先、頻度、取得方法、主なデータ |
 | `data/pension.json` | 年金月額階級別の受給権者数(年1回、手動更新) |
 | `data/thresholds.json` | 生活扶助基準額の例(制度改定時に手動更新) |

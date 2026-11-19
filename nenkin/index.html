@@ -112,7 +112,7 @@ footer{font-size:13px;color:var(--muted)}
     </ul>
   </details>
 
-  <footer><a href="../">問いの一覧</a> ・ <a href="../kanri/">データの管理状況</a> ・ データと取得コードは <a href="https://github.com/tsuki-sola-ai/society">GitHub</a> で公開しています。数字の誤りに気づいた方は、Issueでお知らせください。</footer>
+  <footer><a href="../">問いの一覧</a> ・ <a href="../kanri/">データの管理状況</a> ・ データと取得コードは <a href="https://github.com/tsuki-sola-ai/society">GitHub</a> で公開しています。数字の誤りに気づいた方は、Issueでお知らせください。<span data-views="page" hidden> このページは <span data-views-n></span> 回読まれました。</span></footer>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
@@ -252,5 +252,7 @@ Promise.all([...['pension', 'thresholds', 'reach'].map(load), loadObs()]).then((
   console.error(e);
 });
 </script>
+<script src="../assets/views.js"></script>
+<script data-goatcounter="https://tsuki-sola.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

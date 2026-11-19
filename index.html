@@ -18,9 +18,10 @@
     <ul class="list" id="questions"><li class="muted">読み込み中…</li></ul>
   </section>
 
-  <footer><a href="kanri/">データの管理状況</a> ・ データと取得コードは <a href="https://github.com/tsuki-sola-ai/society">GitHub</a> で公開しています。</footer>
+  <footer><a href="kanri/">データの管理状況</a> ・ データと取得コードは <a href="https://github.com/tsuki-sola-ai/society">GitHub</a> で公開しています。<span data-views="TOTAL" hidden> これまでに <span data-views-n></span> 回読まれました。</span><br>閲覧数の集計には GoatCounter を使っています。クッキーは使わず、個人を特定できる情報は集めていません。</footer>
 </main>
 
+<script src="assets/views.js"></script>
 <script>
 fetch('data/questions.json', {cache: 'no-cache'}).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then((questions) => {
   const list = document.getElementById('questions');
@@ -29,12 +30,15 @@ fetch('data/questions.json', {cache: 'no-cache'}).then((r) => { if (!r.ok) throw
     const a = document.createElement('a'); a.className = 'item'; a.href = q.url;
     const h = document.createElement('h2'); h.textContent = q.title;
     const p = document.createElement('p'); p.className = 'muted'; p.textContent = q.summary;
-    a.append(h, p); li.append(a);
+    const v = document.createElement('p'); v.className = 'muted'; v.hidden = true;
+    a.append(h, p, v); li.append(a);
+    if (window.viewCount) window.viewCount(new URL(q.url, location.href).pathname).then((n) => { if (n) { v.textContent = n + ' 回閲覧'; v.hidden = false; } });
     return li;
   }));
 }).catch(() => {
   document.getElementById('questions').innerHTML = '<li class="muted">一覧を読み込めませんでした。</li>';
 });
 </script>
+<script data-goatcounter="https://tsuki-sola.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
