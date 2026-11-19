@@ -1,0 +1,13 @@
+[
+{"id": "food", "label": "食費", "official": "食料", "amount": 42545, "kind": "spend"},
+{"id": "utilities", "label": "電気・ガス・水道", "official": "光熱・水道", "amount": 15565, "kind": "spend"},
+{"id": "housing", "label": "住まい(家賃、修繕)", "official": "住居", "amount": 11416, "kind": "spend"},
+{"id": "transport", "label": "交通と通信(携帯代など)", "official": "交通・通信", "amount": 13601, "kind": "spend"},
+{"id": "medical", "label": "医療費", "official": "保健医療", "amount": 8388, "kind": "spend"},
+{"id": "goods", "label": "日用品、家具", "official": "家具・家事用品", "amount": 6069, "kind": "spend"},
+{"id": "clothing", "label": "衣類", "official": "被服及び履物", "amount": 3049, "kind": "spend"},
+{"id": "tax", "label": "税金と社会保険料", "official": "非消費支出", "amount": 12990, "kind": "tax"},
+{"id": "leisure", "label": "趣味、娯楽", "official": "教養娯楽", "amount": 16132, "kind": "spend"},
+{"id": "social", "label": "付き合い(贈り物、会費など)", "official": "その他の消費支出のうち交際費", "amount": 16956, "kind": "spend"},
+{"id": "other", "label": "その他(理美容、こづかいなど)", "official": "その他の消費支出(交際費を除く)", "amount": 14725, "kind": "spend"}
+]

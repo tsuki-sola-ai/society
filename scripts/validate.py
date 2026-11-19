@@ -47,6 +47,15 @@ if set(avg) == {"kiso", "kiso_full", "kosei"}:
         rough = sum(row[key] * (row["low"] + 0.5) * 10_000 for row in pension) / people
         check(abs(rough - avg[key]) < 8_000, f"pension_avg: {key} の平均 {avg[key]:,} が分布からの概算 {rough:,.0f} と離れすぎ")
 
+# 家計簿: 費目の合計が、公表されている消費支出と非消費支出に一致すること(端数の丸めで数円ずれる)
+kakei = load("kakei.json")
+# 公表資料(家計調査 2025年平均、65歳以上の単身無職世帯)。年次更新のときは、この2つも書き換える
+KAKEI_PUBLISHED = {"spend": 148_445, "tax": 12_990}
+for kind, total in KAKEI_PUBLISHED.items():
+    got = sum(row["amount"] for row in kakei if row["kind"] == kind)
+    check(abs(got - total) <= 5, f"kakei: {kind} の合計 {got:,} が公表値 {total:,} と不一致")
+check(all(row["amount"] > 0 and row.get("label") for row in kakei), "kakei: 金額か表示名が欠けている費目がある")
+
 # 受給実態: 月次更新される3項目の整合
 reach = {row["id"]: row for row in load("reach.json")}
 for key in ["elderly_households", "elderly_share", "elderly_single", "pension_rate",

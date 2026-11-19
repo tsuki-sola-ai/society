@@ -2,7 +2,7 @@
   {
     "id": "nenkin",
     "title": "年金だけで暮らせるのか",
-    "summary": "一人暮らしの高齢者が最低限の生活を送るのに必要な額と、受け取っている年金を比べます。足りない分を埋めるはずの生活保護が、実際に届いているかも見ます。",
+    "summary": "一人暮らしの高齢者の家計簿を、年金から順に引き算します。国が保障する最低限の額との比較や、足りない分を埋めるはずの生活保護が実際に届いているかも見ます。",
     "url": "nenkin/",
     "sources": [
       {
@@ -14,6 +14,16 @@
         "data": "生活保護を受けている高齢者世帯数、被保護世帯に占める割合、うち単身世帯数",
         "file": "data/observations.csv",
         "indicator": "hihogo.elderly_households"
+      },
+      {
+        "name": "家計調査(家計収支編)",
+        "publisher": "総務省統計局",
+        "url": "https://www.stat.go.jp/data/kakei/2025np/pdf/summary.pdf",
+        "frequency": "年1回(2月ごろ)",
+        "method": "手動",
+        "data": "65歳以上の単身無職世帯の、費目ごとの1か月の支出と、税金・社会保険料",
+        "file": "data/kakei.json",
+        "as_of": "2025年平均"
       },
       {
         "name": "厚生年金保険・国民年金事業の概況",
