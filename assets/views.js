@@ -1,9 +1,9 @@
-// 閲覧数の表示。GoatCounterが応答しないときや、まだ数字がないときは何も出さない。
+// 閲覧数の表示。GoatCounterが応答しないときや、まだ0回のときは何も出さない。
 const GOATCOUNTER = 'https://tsuki-sola.goatcounter.com';
 
 window.viewCount = (path) => fetch(GOATCOUNTER + '/counter/' + encodeURIComponent(path) + '.json')
   .then((r) => (r.ok ? r.json() : null))
-  .then((d) => (d && d.count != null ? String(d.count) : null))
+  .then((d) => (d && d.count != null && /[1-9]/.test(String(d.count)) ? String(d.count) : null))
   .catch(() => null);
 
 // data-views="page" はこのページ、data-views="TOTAL" はサイト全体の回数を入れる
