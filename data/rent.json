@@ -1,0 +1,7 @@
+[
+{"id": "national", "label": "全国", "rent": 43183, "rent_paid": 44183},
+{"id": "aomori", "label": "青森県", "rent": 28300, "rent_paid": 29242},
+{"id": "osaka_pref", "label": "大阪府", "rent": 44117, "rent_paid": 44587},
+{"id": "tokyo", "label": "東京都", "rent": 59442, "rent_paid": 60746},
+{"id": "tokyo_ku", "label": "東京23区", "rent": 64112, "rent_paid": 65821}
+]

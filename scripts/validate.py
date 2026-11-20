@@ -68,6 +68,15 @@ if "deficit" in supports:
     spend = sum(r["amount"] for r in kakei if r["kind"] == "spend")
     check(20_000 < supports["deficit"]["value"] < spend, "supports: 毎月の不足が想定範囲外")
 
+# 賃貸の家賃: 住宅・土地統計調査の、65歳以上単身・借家の平均家賃
+rent = {row["id"]: row for row in load("rent.json")}
+for key in ["national", "aomori", "tokyo_ku"]:
+    check(key in rent, f"rent: {key} がない")
+for row in rent.values():
+    check(10_000 < row["rent"] <= row["rent_paid"] < 150_000, f"rent: {row['id']} の家賃が想定範囲外")
+if {"national", "aomori", "tokyo_ku"} <= rent.keys():
+    check(rent["aomori"]["rent"] < rent["national"]["rent"] < rent["tokyo_ku"]["rent"], "rent: 地域の大小関係が想定と違う")
+
 # 今後の見通し: 実績か推計かの区別と出典が、すべての行に付いていること
 outlook = load("outlook.json")
 for row in outlook:
