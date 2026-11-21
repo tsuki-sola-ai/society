@@ -40,14 +40,19 @@ ul.do{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px}
 
   <section>
     <h2>1. いくら足りないのか</h2>
-    <p>一人暮らしの高齢者は、住まい以外に月 <b data-n="base">—</b>万円を使っています。年金からこれと住まいの費用を引くと、ひと月の収支は次のとおりです。</p>
+    <p>年金から、ひと月の暮らしにかかるお金を引いてみます。かかるお金は二つに分けられます。</p>
+    <ul class="do">
+      <li><strong>暮らしの費用: 月 <b data-n="base">—</b>万円。</strong>食費 <b data-n="food">—</b>万円、光熱費 <b data-n="util">—</b>万円、税金と保険料 <b data-n="tax">—</b>万円など。一人暮らしの高齢者の平均です。</li>
+      <li><strong>住まいの費用: 人によって大きく違う。</strong>持ち家なら修繕費だけ、賃貸なら毎月の家賃がかかり、家賃は住む場所で倍以上変わります。</li>
+    </ul>
+    <p>そこで、住まいを3通りに分けて「年金 − 暮らしの費用 − 住まいの費用」を計算しました。</p>
     <div class="scroll">
       <table id="bal">
         <thead></thead>
         <tbody></tbody>
       </table>
     </div>
-    <p class="muted">単位は円で、マイナスが不足です。支出は全国の平均、家賃はその地域の高齢の一人暮らしの平均です。</p>
+    <p class="muted">数字はひと月の収支(円)で、マイナスが不足です。家賃は、その地域で高齢の一人暮らしが払っている平均です。</p>
   </section>
 
   <section>
@@ -93,7 +98,7 @@ Promise.all(['kakei', 'pension_avg', 'rent', 'own_home', 'hogo_rate', 'reach'].m
   const incomes = [['基礎年金のみの平均', avg.kiso], ['基礎年金の満額', avg.kiso_full], ['厚生年金の平均', avg.kosei]];
   const cases = [['持ち家', '修繕費 ' + comma(ownCost), ownCost], ['賃貸・青森県', '家賃 ' + comma(rent.aomori), rent.aomori], ['賃貸・東京23区', '家賃 ' + comma(rent.tokyo_ku), rent.tokyo_ku]];
   const mk = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
-  const head = mk('tr'); head.append(mk('th', '住まい'));
+  const head = mk('tr'); head.append(mk('th', '住まいの費用'));
   incomes.forEach(([label, v]) => { const th = mk('th', label, 'num'); th.append(mk('span', man1(v) + '万円')); head.append(th); });
   document.querySelector('#bal thead').replaceChildren(head);
   document.querySelector('#bal tbody').replaceChildren(...cases.map(([label, sub, cost]) => {
@@ -104,7 +109,8 @@ Promise.all(['kakei', 'pension_avg', 'rent', 'own_home', 'hogo_rate', 'reach'].m
   // 最新の割合: 分母がある最後の年。その年の世帯数がファイルになければ、生活保護の最新値で代用する
   const last = hogoRate[hogoRate.length - 1];
   const hogo = last.hogo != null ? last.hogo : (reach.find((r) => r.id === 'elderly_households') || {}).raw;
-  const n = {gap_own: Math.round((base + ownCost - avg.kiso) / 1e4), base: man1(base), hogo_rate: hogo ? Math.round(hogo / (last.all_k * 1000) * 100) : '5'};
+  const item = (id) => man1(kakei.find((r) => r.id === id).amount);
+  const n = {food: item('food'), util: item('utilities'), tax: item('tax'), gap_own: Math.round((base + ownCost - avg.kiso) / 1e4), base: man1(base), hogo_rate: hogo ? Math.round(hogo / (last.all_k * 1000) * 100) : '5'};
   document.querySelectorAll('[data-n]').forEach((e) => { e.textContent = n[e.dataset.n]; });
 }).catch((e) => { console.error(e); document.querySelector('#bal tbody').textContent = 'データを読み込めませんでした。'; });
 </script>
