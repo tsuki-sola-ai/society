@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>足りない人に、生活保護は届いているのか</title>
+<meta name="description" content="少ない収入で暮らす高齢者世帯の数と、生活保護を受けている世帯の数を、公的統計で比べます。">
+<link rel="stylesheet" href="../assets/base.css">
+<style>
+main{gap:28px}
+.part{font-size:13px;font-weight:600;letter-spacing:.1em;color:var(--muted)}
+.answer{margin-top:16px;border-left:3px solid var(--c0);background:var(--panel);border-radius:0 8px 8px 0;padding:14px 18px;font-size:17px;line-height:1.75}
+section{display:flex;flex-direction:column;gap:10px}
+.bars{display:flex;flex-direction:column;gap:14px;margin:4px 0}
+.bars .row{display:flex;flex-direction:column;gap:4px}
+.bars .name{font-size:14px}
+.bars .name small{color:var(--muted);font-size:12px}
+.bars .track{display:flex;align-items:center;gap:8px}
+.bars .bar{height:22px;border-radius:3px;background:var(--muted);min-width:2px}
+.bars .bar.hogo{background:var(--c0)}
+.bars b{font-size:15px;white-space:nowrap;font-variant-numeric:tabular-nums}
+ul.do{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px}
+.more{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.more a{display:block;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 16px;text-decoration:none}
+.more a:hover{border-color:var(--c0)}
+.more small{display:block;color:var(--muted);font-size:13px}
+details summary{font-size:13px;color:var(--muted);cursor:pointer}
+details ul{margin:8px 0 0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <nav class="muted"><a href="../">← 問いの一覧</a></nav>
+    <p class="part">問い</p>
+    <h1>足りない人に、生活保護は届いているのか</h1>
+    <div class="answer"><strong>届いているとは言えません。</strong>年収100万円に満たない高齢者世帯は約 <b data-n="under100">—</b>万世帯。生活保護を受けている高齢者世帯は約 <b data-n="hogo">—</b>万世帯で、その半分に届きません。</div>
+  </header>
+
+  <section>
+    <h2>1. 少ない収入で暮らす人は、どれくらいいるのか</h2>
+    <p>年金で足りない分は、生活保護が補う建て付けです。国が定める一人暮らしの最低限は、持ち家で年84万円ほど、賃貸なら年120万〜158万円です。この水準の世帯数と、保護を受けている世帯数を比べます。</p>
+    <div class="bars" id="bars" role="img" aria-label="高齢者世帯の数の比較"></div>
+    <p class="muted">高齢者世帯は全部で約 <b data-n="all">—</b>万世帯。年収100万円未満の世帯には、貯蓄や持ち家のある世帯も含まれ、全員が保護の対象ではありません。</p>
+  </section>
+
+  <section>
+    <h2>2. なぜ受けていないのか</h2>
+    <ul class="do">
+      <li><strong>貯蓄があると受けられない。</strong>高齢者世帯の <b data-n="savings">—</b>%には貯蓄があり、ほぼ使い切るまで対象になりません。</li>
+      <li><strong>家族に知られたくない。</strong>申請すると、親族に援助できるかの問い合わせが行くことがあります。</li>
+      <li><strong>誤解とためらい。</strong>「年金があると受けられない」は誤りです。恥だと感じる人もいます。</li>
+      <li><strong>窓口で止まる。</strong>相談だけで申請に至らなかった人の数を、国は集計していません。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>3. 貧しい人は増えているのか</h2>
+    <p>数字は一方向ではありません。国全体の貧困率は <b data-n="pov0y">—</b>年の <b data-n="pov0">—</b>%から <b data-n="pov1y">—</b>年の <b data-n="pov1">—</b>%へ少し下がりました。一方、暮らしが「苦しい」と答える高齢者世帯は <b data-n="hard0">—</b>%から <b data-n="hard1">—</b>%へ増えています。</p>
+  </section>
+
+  <section>
+    <h2>4. できること</h2>
+    <ul class="do">
+      <li>生活保護の申請は権利です。年金があっても、足りない分を受け取れます(<a href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsuhogopage.html">厚生労働省</a>)。</li>
+      <li>迷ったら、市区町村の福祉の窓口か地域包括支援センターへ。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>くわしく見る</h2>
+    <ul class="more">
+      <li><a href="../nenkin/"><strong>年金だけで暮らせるのか →</strong><small>年金がいくら足りないのか、住まいごとの収支</small></a></li>
+      <li><a href="../nenkin/kuwashiku/#s5"><strong>生活保護のくわしいデータ →</strong><small>申請と開始の件数、保護を受ける世帯の推移</small></a></li>
+    </ul>
+    <details>
+      <summary>数字の出どころと注意</summary>
+      <ul class="muted">
+        <li>収入の分布と世帯数: 厚生労働省「2024年 国民生活基礎調査」<a href="https://www.e-stat.go.jp/dbview?sid=0002137132">所得 第21表</a>。高齢者世帯の、2023年1年間の所得です。</li>
+        <li>保護を受ける高齢者世帯: 厚生労働省「被保護者調査」2024年度の1か月平均(二次資料で確認)。</li>
+        <li>貧困率、生活意識、貯蓄: 厚生労働省「<a href="https://www.mhlw.go.jp/toukei/saikin/hw/k-tyosa/k-tyosa25/dl/03.pdf">2025年 国民生活基礎調査の概況</a>」。貧困率は国民全体の値で、高齢者だけの値ではありません。</li>
+        <li>年収100万円未満の世帯すべてが、保護の対象になるわけではありません。貯蓄や持ち家がある世帯、二人以上の世帯を含みます。保護を受けている世帯の一部も、この中に入っています。</li>
+        <li>最低限の額は、68歳の一人暮らしの生活保護基準(生活扶助と住宅扶助の上限)を年額に直したものです。</li>
+      </ul>
+    </details>
+  </section>
+
+  <footer><a href="../">問いの一覧</a> ・ <a href="../kanri/">データの管理状況</a><span data-views="page" hidden> ・ 閲覧 <b></b>回</span></footer>
+</main>
+<script>
+const load = (name) => fetch('../data/' + name + '.json').then((r) => { if (!r.ok) throw new Error(name); return r.json(); });
+const man0 = (v) => Math.round(v / 1e4).toLocaleString('ja-JP');
+Promise.all(['hogo_gap', 'hogo_rate'].map(load)).then(([gap, rate]) => {
+  const year = rate.find((r) => r.year === gap.survey_year);
+  const all = year.all_k * 1000, hogo = year.hogo;
+  const share = (lo, hi) => gap.elderly_income_dist.filter((d) => d.lo >= lo && d.hi <= hi).reduce((s, d) => s + d.pct, 0) / 100;
+  const under100 = all * share(0, 100), mid = all * share(100, 150);
+  const rows = [
+    ['年収100万円未満', '月8.3万円未満', under100, ''],
+    ['年収100万〜150万円', '月8.3万〜12.5万円', mid, ''],
+    ['生活保護を受けている', '', hogo, 'hogo']
+  ];
+  const max = Math.max(...rows.map((r) => r[2]));
+  const mk = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
+  document.getElementById('bars').replaceChildren(...rows.map(([name, sub, v, cls]) => {
+    const row = mk('div', null, 'row'), label = mk('div', name + ' ', 'name');
+    if (sub) label.append(mk('small', sub));
+    const track = mk('div', null, 'track'), bar = mk('span', null, 'bar ' + cls);
+    bar.style.width = (v / max * 78) + '%';
+    track.append(bar, mk('b', man0(v) + '万世帯'));
+    row.append(label, track);
+    return row;
+  }));
+  document.getElementById('bars').setAttribute('aria-label', rows.map((r) => r[0] + ' ' + man0(r[2]) + '万世帯').join('、'));
+  const p0 = gap.poverty[0], p1 = gap.poverty[gap.poverty.length - 1], h0 = gap.hard[0], h1 = gap.hard[gap.hard.length - 1];
+  const n = {under100: man0(under100), hogo: man0(hogo), all: man0(all), savings: Math.round(gap.savings_have_pct),
+    pov0y: p0.year, pov0: p0.rate.toFixed(1), pov1y: p1.year, pov1: p1.rate.toFixed(1), hard0: h0.pct.toFixed(1), hard1: h1.pct.toFixed(1)};
+  document.querySelectorAll('[data-n]').forEach((e) => { e.textContent = n[e.dataset.n]; });
+}).catch((e) => { console.error(e); document.getElementById('bars').textContent = 'データを読み込めませんでした。'; });
+</script>
+<script src="../assets/views.js"></script>
+<script data-goatcounter="https://tsuki-sola.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

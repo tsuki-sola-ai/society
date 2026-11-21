@@ -97,6 +97,14 @@ own = load("own_home.json")
 check(50 < own["own_rate"] < 100 and 0 < own["repair_avg"] < 50_000, "own_home: 持家率か修繕費が想定範囲外")
 check(abs(own["repair_avg"] + own["rent_avg"] - own["housing_avg"]) <= 5, "own_home: 修繕費と家賃地代の合計が住居の計と合わない")
 
+# 少ない収入で暮らす高齢者世帯: 分布が低い階級から連続し、割合が現実的であること
+gap = load("hogo_gap.json")
+dist = gap["elderly_income_dist"]
+check(dist[0]["lo"] == 0 and all(a["hi"] == b["lo"] for a, b in zip(dist, dist[1:])), "hogo_gap: 所得階級が連続していない")
+check(5 < sum(d["pct"] for d in dist if d["hi"] <= 100) < 30, "hogo_gap: 年収100万円未満の割合が想定範囲外")
+check(any(r["year"] == gap["survey_year"] and r.get("hogo") for r in load("hogo_rate.json")), "hogo_gap: 調査年の保護世帯数が hogo_rate.json にない")
+check(all(8 < p["rate"] < 25 for p in gap["poverty"]), "hogo_gap: 貧困率が想定範囲外")
+
 # 保護を受ける割合: 年の昇順で、割合が現実的な範囲にあること
 hogo_rate = load("hogo_rate.json")
 check([r["year"] for r in hogo_rate] == sorted({r["year"] for r in hogo_rate}), "hogo_rate: 年が昇順でないか重複している")

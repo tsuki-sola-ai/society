@@ -1,0 +1,26 @@
+{
+"income_year": 2023,
+"survey_year": 2024,
+"elderly_income_dist": [
+ {"label": "50万円未満", "lo": 0, "hi": 50, "pct": 1.1},
+ {"label": "50〜100万円未満", "lo": 50, "hi": 100, "pct": 10.4},
+ {"label": "100〜150万円未満", "lo": 100, "hi": 150, "pct": 12.9},
+ {"label": "150〜200万円未満", "lo": 150, "hi": 200, "pct": 12.6},
+ {"label": "200〜250万円未満", "lo": 200, "hi": 250, "pct": 11.9},
+ {"label": "250〜300万円未満", "lo": 250, "hi": 300, "pct": 11.2}
+],
+"elderly_median_man": 253,
+"elderly_mean_man": 314.8,
+"poverty": [
+ {"year": 2012, "rate": 16.1, "line_man": 122},
+ {"year": 2015, "rate": 15.7, "line_man": 122},
+ {"year": 2018, "rate": 15.7, "line_man": 124},
+ {"year": 2021, "rate": 15.4, "line_man": 127},
+ {"year": 2024, "rate": 15.0, "line_man": 138}
+],
+"hard": [
+ {"year": 2022, "pct": 48.3, "very": 18.1},
+ {"year": 2025, "pct": 52.1, "very": 21.0}
+],
+"savings_have_pct": 81.2
+}
