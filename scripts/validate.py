@@ -70,8 +70,10 @@ if "deficit" in supports:
 
 # 賃貸の家賃: 住宅・土地統計調査の、65歳以上単身・借家の平均家賃
 rent = {row["id"]: row for row in load("rent.json")}
-for key in ["national", "aomori", "tokyo_ku"]:
+for key in ["national", "aomori", "tokyo_ku", "national_public", "national_private"]:
     check(key in rent, f"rent: {key} がない")
+if {"national", "national_public", "national_private"} <= rent.keys():
+    check(rent["national_public"]["rent"] < rent["national"]["rent"] < rent["national_private"]["rent"], "rent: 公営 < 全体 < 民営 になっていない")
 for row in rent.values():
     check(10_000 < row["rent"] <= row["rent_paid"] < 150_000, f"rent: {row['id']} の家賃が想定範囲外")
 if {"national", "aomori", "tokyo_ku"} <= rent.keys():

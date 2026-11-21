@@ -3,5 +3,8 @@
 {"id": "aomori", "label": "青森県", "rent": 28300, "rent_paid": 29242},
 {"id": "osaka_pref", "label": "大阪府", "rent": 44117, "rent_paid": 44587},
 {"id": "tokyo", "label": "東京都", "rent": 59442, "rent_paid": 60746},
-{"id": "tokyo_ku", "label": "東京23区", "rent": 64112, "rent_paid": 65821}
+{"id": "tokyo_ku", "label": "東京23区", "rent": 64112, "rent_paid": 65821},
+{"id": "national_public", "label": "公営住宅(全国)", "rent": 18689, "rent_paid": 18983, "share": 25.1},
+{"id": "national_ur", "label": "UR・公社(全国)", "rent": 59814, "rent_paid": 59825, "share": 8.3},
+{"id": "national_private", "label": "民営借家(全国)", "rent": 50847, "rent_paid": 52049, "share": 65.5}
 ]
