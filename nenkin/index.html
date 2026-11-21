@@ -19,6 +19,15 @@ h3{font-size:19px;font-weight:600;line-height:1.5;margin:0}
 h4{font-size:13px;font-weight:400;color:var(--muted);margin:0;line-height:1.5}
 .part{font-size:13px;font-weight:600;letter-spacing:.1em;color:var(--muted)}
 .part.rule{border-top:1px solid var(--line);padding-top:28px;margin-bottom:-12px}
+.group{font-size:15px;font-weight:600;color:var(--c0);margin:8px 0 -20px;padding-left:10px;border-left:3px solid var(--c0)}
+.flow{margin-top:20px;display:flex;flex-direction:column;gap:8px}
+.flow ol{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:6px}
+.flow a{color:inherit}
+.measures h3{margin-top:16px;font-size:17px}
+.opts{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6;min-width:520px}
+.opts th,.opts td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+.opts th{font-size:13px;color:var(--muted);font-weight:600}
+.opts td:first-child{font-weight:600;width:30%}
 .ask{font-size:17px;margin-top:10px}
 .answer{margin-top:20px;border-left:3px solid var(--c0);background:var(--panel);border-radius:0 8px 8px 0;padding:16px 20px;display:flex;flex-direction:column;gap:10px;font-size:17px;line-height:1.75}
 .final ol,.final ul{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:10px}
@@ -82,11 +91,23 @@ footer{font-size:13px;color:var(--muted)}
       <p><strong>暮らせません。</strong>一人暮らしの高齢者は、生活費に平均で月 <b data-n="spend_man">—</b>万円を使っています。基礎年金だけの人が受け取っている年金は、平均で月 <b data-n="kiso_avg">—</b>万円。<b data-n="ran_out">—</b>を払うと、もう残りません。</p>
       <p>暮らせている人は、持ち家、配偶者の年金、仕事、貯蓄のどれかで補っています。どれも持たない人を最後に支えるのが、生活保護です。</p>
     </div>
+    <nav class="flow" aria-label="このページの流れ">
+      <p class="part">このページの流れ</p>
+      <ol>
+        <li><a href="#s1"><strong>いくら足りないのか。</strong></a>家計簿のように年金から支出を引き、国が保障する最低限の額とも比べます。</li>
+        <li><a href="#s4"><strong>それでも暮らせているのはなぜか。</strong></a>持ち家、家族の年金、仕事、貯蓄という支えを確かめます。</li>
+        <li><a href="#s5"><strong>最後の支えは届いているか。</strong></a>生活保護を受けている高齢者の数と、その移り変わりを見ます。</li>
+        <li><a href="#taisaku"><strong>では、どうすればよいか。</strong></a>今困っている人、これから年金を受け取る人、社会全体の三つに分けて整理します。</li>
+      </ol>
+      <p class="muted">急ぐ人は、<a href="#ketsuron">まとめ</a>と<a href="#taisaku">対策</a>だけ読めば要点が分かります。</p>
+    </nav>
   </header>
 
   <p class="part rule">公開情報の分析</p>
 
-  <section>
+  <p class="group">いくら足りないのか</p>
+
+  <section id="s1">
     <h3>1. 家計簿で引き算してみる</h3>
     <p>一人暮らしで働いていない65歳以上の人が、実際に毎月使っている金額の平均です。年金から、上から順に引いていきます。</p>
     <div class="scroll">
@@ -101,7 +122,7 @@ footer{font-size:13px;color:var(--muted)}
     <p class="muted">金額は平均です。住まいの費用を最後に分けたのは、持ち家か賃貸かで大きく変わるからです。家計調査の「住まい」は、家賃を払っていない持ち家の人も含めた平均なので低く出ます。賃貸の行では、これを65歳以上の一人暮らしが実際に払っている家賃の平均(月 <b data-n="rent_man">—</b>万円、公営住宅を含む)に置き換えました。地域差は大きく、東京23区では月 <b data-n="rent_ku_man">—</b>万円、青森県では月 <b data-n="rent_aomori_man">—</b>万円です。税金と社会保険料は、収入が少なければこれより下がります。年金がこの支出に届かない人は、実際にはここまで使えていません。食費や付き合いを切り詰めるか、貯蓄を取り崩すか、働いて補っているということです。</p>
   </section>
 
-  <section>
+  <section id="s2">
     <h3>2. 国が保障する最低限と比べても足りない</h3>
     <p>家計簿の金額は、平均的な暮らしの支出でした。では、国が生活保護で保障している最低限の水準と比べるとどうか。上の3本が最低限の額、下の3本が受け取っている年金です。</p>
     <div class="chart" id="need" style="min-height:366px"></div>
@@ -115,7 +136,7 @@ footer{font-size:13px;color:var(--muted)}
     <p class="muted">最低限の額は、生活保護の基準から出しています。食費や光熱費にあたる生活扶助と、家賃にあたる住宅扶助の上限の合計で、68歳の一人暮らしの場合です。医療費と介護費は別に保障されるため、含めていません。家賃は、生活保護が家賃として出す上限額です。東京23区の一人暮らしで月 <b data-n="tk_rent">—</b>万円、青森県の町村で月 <b data-n="ru_rent">—</b>万円で、世間の家賃相場ではありません。東京23区で65歳以上の一人暮らしが実際に払っている家賃は平均で月 <b data-n="rent_ku_man">—</b>万円(2023年)で、上限を上回ります。保護を受ける人は、この上限に収まる部屋を探すことになります。実際の家賃が上限より安ければ、最低限の額も下がります。地方の家賃は青森県の町村の例で、地域によって上限は異なります。</p>
   </section>
 
-  <section>
+  <section id="s3">
     <h3>3. 年金の分布で見ると、基礎年金のみの人は家賃がなくても届かない</h3>
     <p>棒は、年金の月額ごとの人数です。点線で挟んだ二つの帯が、上で見た最低限の額の範囲です。左の帯は家賃がない場合(<b data-n="own_lo">—</b>万〜<b data-n="own_hi">—</b>万円)、右の帯は家賃を含む場合(<b data-n="need_lo">—</b>万〜<b data-n="need_hi">—</b>万円)です。</p>
     <ul class="legend">
@@ -128,7 +149,9 @@ footer{font-size:13px;color:var(--muted)}
     <p class="muted">ここでは、あえて一人ひとりの年金額で見ています。憲法25条が保障する最低限度の生活は個人の権利であり、一人で暮らすことになったときに自分の年金で届くかどうかを示すためです。帯より左にいる人には、配偶者の年金や仕事の収入、貯蓄と合わせて暮らしている人も含まれ、全員が今困窮しているわけではありません。ただ、死別や離別でその支えがなくなれば、自分の年金だけでは目安に届かなくなります。なお、生活保護を受けられるかどうかは、個人ではなく世帯単位で判定されます。また、65歳以上の8割以上は持ち家に住んでいるので、家賃を含む水準が当てはまるのは一部の人です。年金額は令和6年度末、最低限の額は令和8年10月、家計簿は2025年の水準で、その間に年金は約4%引き上げられています。</p>
   </section>
 
-  <section>
+  <p class="group">それでも暮らせているのはなぜか</p>
+
+  <section id="s4">
     <h3>4. それでも暮らせているのはなぜか</h3>
     <p>年金が支出に届かなくても、多くの人は暮らしています。公的統計から読み取れる支えは、次の四つです。</p>
     <div class="cards">
@@ -156,7 +179,9 @@ footer{font-size:13px;color:var(--muted)}
     <p>ただ、暮らせているとは言い切れません。高齢者世帯の <b data-s="hard">—</b>%が生活を「苦しい」と答えていて、「大変苦しい」だけで <b data-s="very_hard">—</b>%です。四つの支えのどれも持たない人、つまり都市部で賃貸に一人で暮らし、貯蓄が尽き、働けなくなった人が、最も厳しい位置にいます。</p>
   </section>
 
-  <section>
+  <p class="group">最後の支えは届いているか</p>
+
+  <section id="s5">
     <h3>5. 足りない分は生活保護で埋められる。実際に届いているか</h3>
     <p>年金と生活保護は同時に受けられ、最低生活費に足りない差額が支給されます。下は、その仕組みがどこまで届いているかを示す数字です。</p>
     <div class="cards">
@@ -189,14 +214,18 @@ footer{font-size:13px;color:var(--muted)}
     <p>申請まで進めば9割近くが受給に至ります。一方で、相談から申請に進む人は京都市の例で3割ほどです。相談した人には、対象外の人や情報を集めに来ただけの人も含まれるので、残りがすべて断られたわけではありません。ただ、窓口で申請に至らなかった人の数を国は集計しておらず、ここが一番見えない部分です。</p>
   </section>
 
-  <section>
+  <section id="s6">
     <h3>6. 生活保護を受ける高齢者世帯の推移</h3>
+    <p>生活保護を受ける高齢者世帯は、<b data-h="y0">—</b>年度の <b data-h="h0">—</b>万世帯から <b data-h="y1">—</b>年の <b data-h="h1">—</b>万世帯へ、<b data-h="hx">—</b>倍に増えました。ただ、高齢者世帯そのものも <b data-h="a0">—</b>万世帯から <b data-h="a1">—</b>万世帯へ <b data-h="ax">—</b>倍に増えています。高齢者世帯のうち保護を受ける割合で見ると、<b data-h="ypeak">—</b>年の <b data-h="rpeak">—</b>%をピークに下がり、<b data-h="y1">—</b>年は <b data-h="r1">—</b>%です。</p>
+    <div class="chart" id="rate" style="min-height:400px"></div>
+    <p class="muted">世帯数が増えたのは、主に高齢者世帯そのものが増えたためです。割合が下がった理由は、この数字だけでは分かりません。暮らしに困る人が減ったのか、必要な人に届かなくなったのかは、区別できないからです。割合は、保護を受ける高齢者世帯数(年度の1か月平均。<b data-h="y1">—</b>年は6月の概数)を、国民生活基礎調査の高齢者世帯数(各年6月の推計)で割ったものです。二つの調査は時点と調べ方が違うので、小数点以下の差は目安です。2016年の高齢者世帯数は熊本県を含みません。</p>
+    <h4>この3年の月ごとの動き</h4>
     <p>最新の <b data-t="period">—</b>は <b data-t="latest">—</b>万世帯で、前年の同じ月と比べて <b data-t="diff">—</b>世帯(<b data-t="pct">—</b>%)です。</p>
     <div class="chart" id="trend"></div>
     <p class="muted">縦軸は0から始まっていません。変化を見やすくするために範囲を絞っているので、実際の増減は全体の1〜2%ほどです。毎年3月に1万世帯前後の段差がありますが、原因は確認できていません。月ごとの上下ではなく、前年の同じ月との比較で読んでください。数字は毎月の概数で、あとから確定値で訂正されることがあります。</p>
   </section>
 
-  <p class="part rule">結論</p>
+  <p class="part rule" id="ketsuron">結論</p>
 
   <section class="final">
     <h2>基礎年金だけでは、一人で暮らしていけない</h2>
@@ -213,6 +242,47 @@ footer{font-size:13px;color:var(--muted)}
       <li>公営住宅など、家賃の安い住まいに入れている人の割合。</li>
       <li>生活保護の窓口で、申請に至らなかった人の全国の数。</li>
     </ul>
+  </section>
+
+  <p class="part rule" id="taisaku">対策</p>
+
+  <section class="final measures">
+    <h2>では、どうすればよいか</h2>
+    <p class="muted">ここは統計ではなく、いまある制度と、議論されている選択肢の整理です。金額や条件は2026年度のもので、毎年変わります。使えるかどうかは人によって違うので、最後は窓口で確かめてください。</p>
+
+    <h3>今、年金だけでは足りない人</h3>
+    <ul>
+      <li><strong>生活保護を申請する。</strong>年金を受けていても、国が定める最低限の額に足りない分を受け取れます。申請は権利で、書類がそろっていなくても、家族に相談する前でも申請できます。窓口は住んでいる市区町村の福祉事務所です(<a href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsuhogopage.html">厚生労働省の案内</a>)。</li>
+      <li><strong>年金生活者支援給付金を確かめる。</strong>年金などの収入が年およそ81万円以下で、世帯の全員が住民税非課税なら、月5,620円を基準にした額が年金に上乗せされます。額は保険料を納めた期間で変わります。自動では始まらず、請求が必要です(<a href="https://www.nenkin.go.jp/oshirase/taisetu/kojin/2026/202604/0401.html">日本年金機構の案内</a>)。</li>
+      <li><strong>住まいの費用を下げる。</strong>このページで見たとおり、家賃があるかどうかで不足額は月3万円ほど変わります。公営住宅は収入に応じた家賃で、市区町村や都道府県が募集しています。</li>
+      <li><strong>保険料の軽減を確かめる。</strong>国民健康保険料と介護保険料には、所得の低い世帯向けの軽減があります。市区町村の窓口で確かめられます。</li>
+      <li><strong>どこに行けばよいか分からないとき。</strong>市区町村の「生活困窮者自立支援」の相談窓口か、地域包括支援センターで、使える制度をまとめて相談できます。</li>
+    </ul>
+
+    <h3>これから年金を受け取る人</h3>
+    <ul>
+      <li><strong>自分の見込額を知る。</strong>毎年届く「ねんきん定期便」か、ねんきんネットで確かめられます。対策はここから始まります。</li>
+      <li><strong>納めた期間を増やす。</strong>基礎年金は40年納めて満額です。足りない期間がある人は、60歳から65歳まで任意で加入して増やせます。免除を受けた期間は、10年以内ならあとから納められます。</li>
+      <li><strong>受け取り始めを遅らせる。</strong>1か月遅らせるごとに年金は0.7%増え、増えた額が一生続きます。70歳からなら42%増で、基礎年金の満額は月 <b data-n="kiso_full">—</b>万円から約 <b data-n="kiso_full_70">—</b>万円になります。ただし、待つあいだの生活費が別に必要です(<a href="https://www.nenkin.go.jp/service/jukyu/roureinenkin/kuriage-kurisage/20140421-02.html">日本年金機構の案内</a>)。</li>
+      <li><strong>厚生年金に入って働く。</strong>厚生年金の人の平均は月 <b data-n="kosei_avg">—</b>万円で、基礎年金だけの人の約 <b data-n="kosei_ratio">—</b>倍です。パートでも加入できる範囲が広がっています。</li>
+      <li><strong>住まいを考えておく。</strong>老後に家賃を払い続けるかどうかが、最も大きな分かれ目です。</li>
+    </ul>
+
+    <h3>社会として考えられること</h3>
+    <p>どの案にも費用と反対意見があります。どれを選ぶかは価値判断なので、このページでは優劣をつけません。</p>
+    <div class="scroll">
+      <table class="opts">
+        <thead><tr><th>案</th><th>ねらい</th><th>課題</th></tr></thead>
+        <tbody>
+          <tr><td>基礎年金の水準を上げる</td><td>基礎年金だけの人すべてに届く</td><td>財源が大きい。保険料か税の負担が増え、現役世代との分け方が問われる</td></tr>
+          <tr><td>年金の少ない人への上乗せを厚くする</td><td>困っている人に絞って届けられる</td><td>保険料を納めてきた人との公平。今の上乗せは月5,000円台と小さい</td></tr>
+          <tr><td>家賃を支える(家賃補助、公営住宅)</td><td>不足を最も広げている家賃に直接効く</td><td>財源。持ち家の人との公平。家賃の値上がりを招くおそれ</td></tr>
+          <tr><td>生活保護を使いやすくする</td><td>いまある最後の支えを、必要な人に届ける</td><td>費用が増える。不正受給や働く意欲への懸念がある</td></tr>
+          <tr><td>厚生年金に入れる人を増やす、高齢でも働きやすくする</td><td>これから年金が少なくなる人を減らす</td><td>事業主の負担が増える。すでに高齢の人、働けない人には届かない</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted">判断の材料として足りないのは、「相談したが申請に至らなかった人」の全国の数です。これが分からないかぎり、生活保護が届いているかどうかは評価できません。</p>
   </section>
 
   <p class="part rule">参考: 今後の見通し</p>
@@ -243,6 +313,7 @@ footer{font-size:13px;color:var(--muted)}
       <li>今後の見通し(世帯数、未婚者の割合): <a href="https://www.ipss.go.jp/pp-ajsetai/j/HPRJ2024/t-page.asp">国立社会保障・人口問題研究所「日本の世帯数の将来推計(全国推計)令和6年推計」</a>。数字は<a href="https://www.cao.go.jp/kodoku_koritsu/torikumi/project_team/dai2/pdf/shiryou1.pdf">同研究所が政府の会議に出した資料</a>で確認。</li>
       <li>今後の見通し(年金額の分布): <a href="https://www.mhlw.go.jp/content/001270498.pdf">厚生労働省「令和6年財政検証関連資料 年金額の分布推計」</a>。割合は報道の集計で確認し、月5万円未満、5万〜7万円、7万〜10万円の三つを足しています。</li>
       <li>高齢者世帯の数: 厚生労働省「被保護者調査」月次概数。毎月自動で取り込み、検算に通ったものだけを反映しています。</li>
+      <li>保護を受ける割合: 分子は厚生労働省「被保護者調査」月次調査の確定値(2011年度以前は福祉行政報告例)の高齢者世帯数。2024年度は二次資料で確認した値。分母は<a href="https://www.mhlw.go.jp/toukei/saikin/hw/k-tyosa/k-tyosa25/dl/14.pdf">厚生労働省「2025年 国民生活基礎調査の概況」</a>表1の高齢者世帯数。分母が載っている年だけを使っています。</li>
       <li>年金を受けている被保護高齢者の割合: <a href="https://oisr-org.ws.hosei.ac.jp/images/oz/contents/ohara_787_p16.pdf">大原社会問題研究所雑誌 787号</a>(被保護者調査に基づく)。</li>
       <li>申請件数と保護開始世帯数: 被保護者調査の2024年分を、<a href="https://www.newsweekjapan.jp/articles/-/16014">ニューズウィーク日本版の記事</a>の集計で確認。</li>
       <li>京都市の相談件数と申請件数: <a href="https://gentosha-go.com/articles/-/51542">書籍の抜粋記事</a>による。対象年度は出典を参照してください。</li>
@@ -260,7 +331,7 @@ const load = (name) => fetch('../data/' + name + '.json').then((r) => { if (!r.o
 
 const loadObs = () => fetch('../data/observations.csv').then((r) => { if (!r.ok) throw new Error('observations'); return r.text(); }).then((t) => d3.csvParse(t));
 
-Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supports', 'outlook', 'rent'].map(load), loadObs()]).then(([pension, thresholds, reach, pensionAvg, kakei, supports, outlook, rents, obs]) => {
+Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supports', 'outlook', 'rent', 'hogo_rate'].map(load), loadObs()]).then(([pension, thresholds, reach, pensionAvg, kakei, supports, outlook, rents, hogoRate, obs]) => {
   const total = (pick, below) => d3.sum(pension.filter((r) => below == null || r.low < below), pick);
   const kiso = total((r) => r.kiso), kisoUnder7 = total((r) => r.kiso, 7), kisoWomen = total((r) => r.kiso_f);
   const kosei = total((r) => r.kosei);
@@ -306,6 +377,7 @@ Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supp
     rent_man: man1(rent.national), rent_ku_man: man1(rent.tokyo_ku), rent_aomori_man: man1(rent.aomori),
     outgo_rent_man: man1(outgoTotal - home.amount + rent.national), gap_rent: man1(outgoTotal - home.amount + rent.national - avg.kiso),
     gap_rent_kosei: man1(outgoTotal - home.amount + rent.national - avg.kosei),
+    kiso_full_70: man1(avg.kiso_full * 1.42), kosei_avg: man1(avg.kosei), kosei_ratio: (avg.kosei / avg.kiso).toFixed(1),
     tk_living: man1(tk0.living), tk_rent: man1(tk0.rent), ru_rent: man1(ru0.rent),
     need_lo: man1(needLo), need_hi: man1(needHi), own_lo: man1(ownLo), own_hi: man1(ownHi),
     kiso_avg: man1(avg.kiso), kiso_full: man1(avg.kiso_full),
@@ -388,6 +460,54 @@ Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supp
       pct: prev ? d3.format('+.1f')((lastPt.value / prev.value - 1) * 100) : '—'};
     document.querySelectorAll('[data-t]').forEach((e) => { e.textContent = t[e.dataset.t]; });
   }
+  // 長期: 保護を受ける高齢者世帯数と、高齢者世帯全体に占める割合
+  const rateRows = hogoRate.map((r) => {
+    const obsPt = r.hogo_period ? series.find((d) => d.period === r.hogo_period) : null;
+    const hogo = r.hogo != null ? r.hogo : (obsPt ? obsPt.value : null);
+    return hogo == null ? null : {year: r.year, hogo, all: r.all_k * 1000, rate: hogo / (r.all_k * 1000) * 100, kind: r.kind, note: r.note};
+  }).filter(Boolean);
+  if (rateRows.length > 1) {
+    const f = rateRows[0], l = rateRows[rateRows.length - 1], pk = rateRows[d3.maxIndex(rateRows, (r) => r.rate)];
+    const h = {y0: f.year, y1: l.year, h0: man1(f.hogo), h1: man1(l.hogo), hx: (l.hogo / f.hogo).toFixed(1),
+      a0: comma(Math.round(f.all / 1e4)), a1: comma(Math.round(l.all / 1e4)), ax: (l.all / f.all).toFixed(1),
+      ypeak: pk.year, rpeak: pk.rate.toFixed(1), r1: l.rate.toFixed(1)};
+    document.querySelectorAll('[data-h]').forEach((e) => { e.textContent = h[e.dataset.h]; });
+  }
+  const rel = document.getElementById('rate');
+  const drawRate = () => {
+    rel.replaceChildren();
+    if (rateRows.length < 2) { rel.textContent = '割合を描けるだけのデータがありません。'; return; }
+    const W = Math.max(280, rel.clientWidth), m = {t: 30, r: 26, b: 28, l: 44}, ph = 150, gap = 54, H = m.t + ph * 2 + gap + m.b;
+    const narrow = W < 480;
+    const x = d3.scaleLinear().domain(d3.extent(rateRows, (r) => r.year)).range([m.l + 12, W - m.r]);
+    const svg = d3.select(rel).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('width', '100%').attr('role', 'img')
+      .attr('aria-label', '生活保護を受ける高齢者世帯数と、高齢者世帯に占める割合の推移。' + rateRows.map((r) => r.year + '年 ' + man1(r.hogo) + '万世帯、' + r.rate.toFixed(1) + '%').join('。') + '。');
+    // 年が詰まっている点(直前の点から2年未満)は、数字と年の表示を省く。狭い画面では最後の点の直前3年も省く
+    const lastYear = rateRows[rateRows.length - 1].year;
+    const crowded = (r, i) => i > 0 && i < rateRows.length - 1 && (r.year - rateRows[i - 1].year < 2 || (narrow && lastYear - r.year < 4));
+    const panel = (top, title, unit, max, ticks, val, fmt, color) => {
+      const y = d3.scaleLinear().domain([0, max]).range([top + ph, top]);
+      svg.append('text').attr('x', m.l - 38).attr('y', top - 14).style('fill', 'var(--fg)').style('font-weight', 600).style('font-size', '13px').text(title);
+      ticks.forEach((v) => {
+        svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(v)).attr('y2', y(v)).style('stroke', v === 0 ? 'var(--axis)' : 'var(--grid)');
+        svg.append('text').attr('x', m.l - 6).attr('y', y(v)).attr('dy', '0.32em').attr('text-anchor', 'end').text(v + (v === ticks[ticks.length - 1] ? unit : ''));
+      });
+      svg.append('path').attr('d', d3.line().x((r) => x(r.year)).y((r) => y(val(r)))(rateRows)).style('fill', 'none').style('stroke', color).style('stroke-width', 2);
+      rateRows.forEach((r, i) => {
+        svg.append('circle').attr('cx', x(r.year)).attr('cy', y(val(r))).attr('r', 3.5).style('fill', color);
+        if (crowded(r, i)) return;
+        svg.append('text').attr('x', x(r.year)).attr('y', y(val(r)) - 9).attr('text-anchor', i === rateRows.length - 1 ? 'end' : 'middle')
+          .attr('dx', i === rateRows.length - 1 ? 6 : 0).style('fill', 'var(--fg)').style('font-weight', 600).text(fmt(val(r)));
+      });
+      return y;
+    };
+    panel(m.t, '保護を受ける高齢者世帯数', '万', 100, [0, 25, 50, 75, 100], (r) => r.hogo / 1e4, (v) => v.toFixed(1), 'var(--c0)');
+    panel(m.t + ph + gap, '高齢者世帯に占める割合', '%', 8, [0, 2, 4, 6, 8], (r) => r.rate, (v) => v.toFixed(1) + '%', 'var(--c1)');
+    rateRows.forEach((r, i) => {
+      if (crowded(r, i)) return;
+      svg.append('text').attr('x', x(r.year)).attr('y', H - m.b + 18).attr('text-anchor', i === rateRows.length - 1 ? 'end' : 'middle').attr('dx', i === rateRows.length - 1 ? 6 : 0).text(r.year + (i === 0 || i === rateRows.length - 1 ? '年' : ''));
+    });
+  };
   const tel = document.getElementById('trend');
   const drawTrend = () => {
     tel.replaceChildren();
@@ -537,9 +657,10 @@ Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supp
 
   draw();
   drawNeed();
+  drawRate();
   drawTrend();
   let last = el.clientWidth;
-  new ResizeObserver(() => { if (el.clientWidth !== last) { last = el.clientWidth; draw(); drawNeed(); drawTrend(); } }).observe(el);
+  new ResizeObserver(() => { if (el.clientWidth !== last) { last = el.clientWidth; draw(); drawNeed(); drawRate(); drawTrend(); } }).observe(el);
 }).catch((e) => {
   document.getElementById('chart').textContent = 'データを読み込めませんでした。';
   console.error(e);

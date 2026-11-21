@@ -77,6 +77,15 @@ for row in rent.values():
 if {"national", "aomori", "tokyo_ku"} <= rent.keys():
     check(rent["aomori"]["rent"] < rent["national"]["rent"] < rent["tokyo_ku"]["rent"], "rent: 地域の大小関係が想定と違う")
 
+# 保護を受ける割合: 年の昇順で、割合が現実的な範囲にあること
+hogo_rate = load("hogo_rate.json")
+check([r["year"] for r in hogo_rate] == sorted({r["year"] for r in hogo_rate}), "hogo_rate: 年が昇順でないか重複している")
+for row in hogo_rate:
+    check(row.get("hogo") is not None or row.get("hogo_period"), f"hogo_rate: {row['year']} に世帯数も参照月もない")
+    if row.get("hogo") is not None:
+        rate = row["hogo"] / (row["all_k"] * 1000) * 100
+        check(3 < rate < 10, f"hogo_rate: {row['year']} の割合 {rate:.1f}% が想定範囲外")
+
 # 今後の見通し: 実績か推計かの区別と出典が、すべての行に付いていること
 outlook = load("outlook.json")
 for row in outlook:
