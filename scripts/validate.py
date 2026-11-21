@@ -84,6 +84,8 @@ area = load("rent_area.json")
 check(sum(r["kind"] == "pref" for r in area) == 47, "rent_area: 都道府県が47件でない")
 check(sum(r["kind"] == "city" for r in area) == 21, "rent_area: 大都市が21件でない")
 check(all(10_000 < r["rent"] <= r["rent_paid"] < 150_000 for r in area), "rent_area: 家賃が想定範囲外の地域がある")
+check(all(20_000 < r["private_small"] <= r["private_small_paid"] < 150_000 for r in area), "rent_area: 民間の家賃が想定範囲外の地域がある")
+check(sum(r["private_small"] > r["rent"] for r in area) >= 60, "rent_area: 民間の家賃が、公営を含む平均より安い地域が多すぎる")
 by_name = {r["name"]: r["rent"] for r in area}
 for key, name in [("national", "全国"), ("aomori", "青森県"), ("tokyo_ku", "東京23区"), ("tokyo", "東京都"), ("osaka_pref", "大阪府")]:
     if key in rent:
