@@ -77,6 +77,17 @@ for row in rent.values():
 if {"national", "aomori", "tokyo_ku"} <= rent.keys():
     check(rent["aomori"]["rent"] < rent["national"]["rent"] < rent["tokyo_ku"]["rent"], "rent: 地域の大小関係が想定と違う")
 
+# 地域ごとの家賃: 47都道府県と21大都市がそろい、本編で使う値と一致すること
+area = load("rent_area.json")
+check(sum(r["kind"] == "pref" for r in area) == 47, "rent_area: 都道府県が47件でない")
+check(sum(r["kind"] == "city" for r in area) == 21, "rent_area: 大都市が21件でない")
+check(all(10_000 < r["rent"] <= r["rent_paid"] < 150_000 for r in area), "rent_area: 家賃が想定範囲外の地域がある")
+by_name = {r["name"]: r["rent"] for r in area}
+for key, name in [("national", "全国"), ("aomori", "青森県"), ("tokyo_ku", "東京23区"), ("tokyo", "東京都"), ("osaka_pref", "大阪府")]:
+    if key in rent:
+        check(by_name.get(name) == rent[key]["rent"], f"rent_area: {name} が rent.json と一致しない")
+check(Path(ROOT / "nenkin" / "chiiki" / "index.html").exists() if "ROOT" in globals() else True, "地域ごとのページがない")
+
 # 持ち家の修繕費: 家計調査の平均と持家率。家賃地代との合計が住居の計と合うこと
 own = load("own_home.json")
 check(50 < own["own_rate"] < 100 and 0 < own["repair_avg"] < 50_000, "own_home: 持家率か修繕費が想定範囲外")
