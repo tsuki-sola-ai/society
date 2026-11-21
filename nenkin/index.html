@@ -119,7 +119,7 @@ footer{font-size:13px;color:var(--muted)}
     </div>
     <p class="muted"><span class="key first"></span>色の濃いマスは、そこで年金が尽きたことを示します。それより下の赤い数字は、足りない額の積み上がりです。</p>
     <p id="ledger-result"></p>
-    <p class="muted">食費などの費目は、全国の平均です。住まいの費用だけは平均を使っていません。持ち家か賃貸か、どこに住むかで差が大きく、平均では誰の暮らしにも当てはまらないからです。賃貸の家賃は、その地域で65歳以上の一人暮らしが実際に払っている家賃の平均で、公営住宅も含みます。持ち家の行は家賃を0円としましたが、実際には修繕費や固定資産税がかかります。税金と社会保険料は、収入が少なければこれより下がります。年金がこの支出に届かない人は、実際にはここまで使えていません。食費や付き合いを切り詰めるか、貯蓄を取り崩すか、働いて補っているということです。</p>
+    <p class="muted">食費などの費目は、全国の平均です。住まいの費用だけは平均を使っていません。持ち家か賃貸か、どこに住むかで差が大きく、平均では誰の暮らしにも当てはまらないからです。持ち家の修繕費は月 <b data-n="own_cost_man">—</b>万円としました。家計調査では65歳以上の一人暮らしの修繕費が平均で月6,291円で、その <b data-n="own_rate">—</b>%が持ち家なので、持ち家の人ひとりあたりに直した額です。屋根や水回りの工事はまとまった額になるので、月ごとにならした目安です。固定資産税は「税金と社会保険料」の行に入っていますが、これは賃貸の人も含めた平均なので、持ち家の人の実際の負担はもう少し重くなります。賃貸の家賃は、その地域で65歳以上の一人暮らしが実際に払っている家賃の平均で、公営住宅も含みます。税金と社会保険料は、収入が少なければこれより下がります。年金がこの支出に届かない人は、実際にはここまで使えていません。食費や付き合いを切り詰めるか、貯蓄を取り崩すか、働いて補っているということです。</p>
   </section>
 
   <section id="s2">
@@ -230,7 +230,7 @@ footer{font-size:13px;color:var(--muted)}
   <section class="final">
     <h2>基礎年金だけでは、一人で暮らしていけない</h2>
     <ol>
-      <li><strong>足りない額は大きい。</strong>一人暮らしの高齢者の平均的な支出は、住まいの費用を除いても、税金と社会保険料を含めて月 <b data-n="base_man">—</b>万円です。基礎年金だけの人の平均 <b data-n="kiso_avg">—</b>万円では、家賃のかからない持ち家でも毎月 <b data-n="gap_own_ledger">—</b>万円足りません。賃貸なら、家賃の分だけ不足が広がります。青森県(家賃は月 <b data-n="rent_aomori_man">—</b>万円)で <b data-n="gap_rent_aomori">—</b>万円、東京23区(月 <b data-n="rent_ku_man">—</b>万円)で <b data-n="gap_rent_ku">—</b>万円の不足です。厚生年金の人の平均でも、東京23区の賃貸では <b data-n="gap_rent_ku_kosei">—</b>万円足りません。国が生活保護で保障する最低限の額(月 <b data-n="need_lo">—</b>万〜<b data-n="need_hi">—</b>万円)にも届きません。</li>
+      <li><strong>足りない額は大きい。</strong>一人暮らしの高齢者の平均的な支出は、住まいの費用を除いても、税金と社会保険料を含めて月 <b data-n="base_man">—</b>万円です。基礎年金だけの人の平均 <b data-n="kiso_avg">—</b>万円では、持ち家(修繕費が月 <b data-n="own_cost_man">—</b>万円)でも毎月 <b data-n="gap_own_ledger">—</b>万円足りません。賃貸なら、家賃の分だけ不足が広がります。青森県(家賃は月 <b data-n="rent_aomori_man">—</b>万円)で <b data-n="gap_rent_aomori">—</b>万円、東京23区(月 <b data-n="rent_ku_man">—</b>万円)で <b data-n="gap_rent_ku">—</b>万円の不足です。厚生年金の人の平均でも、東京23区の賃貸では <b data-n="gap_rent_ku_kosei">—</b>万円足りません。国が生活保護で保障する最低限の額(月 <b data-n="need_lo">—</b>万〜<b data-n="need_hi">—</b>万円)にも届きません。</li>
       <li><strong>該当する人は少なくない。</strong>基礎年金だけの人は <b data-n="kiso_total_man">—</b>万人います。その <b data-n="kiso_under7_pct">—</b>%は年金が月7万円未満で、<b data-n="kiso_women_pct">—</b>%は女性です。</li>
       <li><strong>暮らせているのは、年金以外の支えがあるから。</strong>持ち家、配偶者の年金、仕事などの収入、貯蓄の四つです。年金の少なさがそのまま困窮にならないのは、このどれかを持っている人が多いためです。</li>
       <li><strong>支えを持たない人が、最も厳しい。</strong>都市部で賃貸に一人で暮らし、貯蓄がなく、働けない人です。配偶者との死別は、支えを一度に失う出来事です。厚生年金がある人でも、<b data-n="kosei_under_lo_pct">—</b>%は月 <b data-n="rent_lo_man">—</b>万円未満で、賃貸の一人暮らしでは最低限の額に届きません。</li>
@@ -303,6 +303,7 @@ footer{font-size:13px;color:var(--muted)}
       <li>年金月額の分布: <a href="https://www.mhlw.go.jp/content/001617995.pdf">厚生労働省「令和6年度 厚生年金保険・国民年金事業の概況」</a>参考資料3・4。「基礎年金のみ」は、厚生年金と共済の加入期間がない老齢基礎年金の受給権者と、旧国民年金の受給権者。厚生年金は民間企業の加入者(第1号)で、金額に基礎年金を含みます。公務員などの共済は入っていません。基礎年金のみの「7万円以上」は、7〜8万円の位置にまとめて描いています。</li>
       <li>家計簿: <a href="https://www.stat.go.jp/data/kakei/2025np/pdf/summary.pdf">総務省統計局「家計調査報告(家計収支編)2025年平均結果の概要」</a>の、65歳以上の単身無職世帯。「その他」は、その他の消費支出から交際費を除いた額。費目の呼び名は、分かりやすいように言い換えています。</li>
       <li>賃貸の家賃: <a href="https://www.e-stat.go.jp/dbview?sid=0004021526">総務省統計局「令和5年住宅・土地統計調査」第124-2-2表</a>の、65歳以上の単身で借家に住む世帯の1か月当たり家賃(家賃0円を含む平均)。公営住宅やURの借家も含みます。</li>
+      <li>持ち家の修繕費: <a href="https://www.e-stat.go.jp/dbview?sid=0002190004">総務省統計局「家計調査」単身世帯 用途分類(年齢階級別)</a>の2025年、65歳以上。設備修繕・維持の平均(月6,291円)を持家率(85.0%)で割った計算値で、統計にそのまま載っている数字ではありません。働いている人も含みます。</li>
       <li>最低限の額のうち生活費(生活扶助): <a href="https://www.mhlw.go.jp/content/001152601.pdf">厚生労働省「生活扶助基準額の算出方法」</a>と、同省が公表している世帯類型別の例(高齢者単身世帯・68歳、令和8年10月)。例の金額は二次情報で確認しました。75歳以上はこれよりやや低くなります。</li>
       <li>最低限の額のうち家賃(住宅扶助): 厚生労働省の通知で定められた単身世帯の限度額。東京23区は53,700円、地方の例は青森県の3級地(町村部)で30,000円。<a href="https://kobekoubora.life.coocan.jp/202004juutakufujo.pdf">令和2年4月時点の限度額一覧の写し</a>などで確認しました。限度額は都道府県や市によって異なり、単身ではおよそ2.5万〜5.4万円の幅があります。支給されるのは、限度額までの実際の家賃です。</li>
       <li>年金の平均額と満額: 平均は上と同じ「事業の概況」(令和6年度末)。基礎年金の満額は<a href="https://www.nenkin.go.jp/oshirase/taisetu/kojin/2026/202604/0401.html">日本年金機構「令和8年4月分からの年金額等について」</a>。</li>
@@ -331,7 +332,7 @@ const load = (name) => fetch('../data/' + name + '.json').then((r) => { if (!r.o
 
 const loadObs = () => fetch('../data/observations.csv').then((r) => { if (!r.ok) throw new Error('observations'); return r.text(); }).then((t) => d3.csvParse(t));
 
-Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supports', 'outlook', 'rent', 'hogo_rate'].map(load), loadObs()]).then(([pension, thresholds, reach, pensionAvg, kakei, supports, outlook, rents, hogoRate, obs]) => {
+Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supports', 'outlook', 'rent', 'hogo_rate', 'own_home'].map(load), loadObs()]).then(([pension, thresholds, reach, pensionAvg, kakei, supports, outlook, rents, hogoRate, ownHome, obs]) => {
   const total = (pick, below) => d3.sum(pension.filter((r) => below == null || r.low < below), pick);
   const kiso = total((r) => r.kiso), kisoUnder7 = total((r) => r.kiso, 7), kisoWomen = total((r) => r.kiso_f);
   const kosei = total((r) => r.kosei);
@@ -346,6 +347,8 @@ Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supp
   // 家計簿: 住まい以外を上から順に引き、最後に住まいを2通り(全体の平均、賃貸の人の家賃)で引く
   const home = kakei.find((r) => r.id === 'housing'), common = kakei.filter((r) => r.id !== 'housing');
   const rent = Object.fromEntries(rents.map((r) => [r.id, r.rent]));
+  // 持ち家の修繕費: 全体の平均を持家率で割って、持ち家の人ひとりあたりに直す(借家の人は修繕費を払わないとみなす)
+  const ownCost = Math.round(ownHome.repair_avg / (ownHome.own_rate / 100));
   const settle = (income) => {
     let balance = income, ranOutAt = -1;
     const rows = common.map((item, i) => {
@@ -375,7 +378,7 @@ Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supp
     outgo_man: man1(outgoTotal), gap_outgo: man1(outgoTotal - avg.kiso),
     other_income_pct: (100 - sup.pension_only).toFixed(1),
     rent_man: man1(rent.national), rent_ku_man: man1(rent.tokyo_ku), rent_aomori_man: man1(rent.aomori),
-    base_man: man1(outgoTotal - home.amount), gap_own_ledger: man1(outgoTotal - home.amount - avg.kiso),
+    base_man: man1(outgoTotal - home.amount), own_cost_man: man1(ownCost), own_rate: ownHome.own_rate, gap_own_ledger: man1(outgoTotal - home.amount + ownCost - avg.kiso),
     gap_rent_aomori: man1(outgoTotal - home.amount + rent.aomori - avg.kiso), gap_rent_ku: man1(outgoTotal - home.amount + rent.tokyo_ku - avg.kiso),
     gap_rent_ku_kosei: man1(outgoTotal - home.amount + rent.tokyo_ku - avg.kosei), gap_rent_aomori_kosei: man1(outgoTotal - home.amount + rent.aomori - avg.kosei),
     kiso_full_70: man1(avg.kiso_full * 1.42), kosei_avg: man1(avg.kosei), kosei_ratio: (avg.kosei / avg.kiso).toFixed(1),
@@ -603,20 +606,19 @@ Promise.all([...['pension', 'thresholds', 'reach', 'pension_avg', 'kakei', 'supp
     return tr;
   };
   const cases = [
-    {label: '家賃なし', sub: '持ち家', amount: 0, src: '修繕費と固定資産税は含めていません'},
-    {label: '青森県', sub: '賃貸', amount: rent.aomori, src: SRC.rent},
-    {label: '大阪府', sub: '賃貸', amount: rent.osaka_pref, src: SRC.rent},
-    {label: '東京23区', sub: '賃貸', amount: rent.tokyo_ku, src: SRC.rent}
+    {label: '修繕費', sub: '持ち家', amount: ownCost, src: SRC.kakei + 'から計算。固定資産税は上の税金の行に含まれます'},
+    {label: '家賃(青森県)', sub: '賃貸・地方', amount: rent.aomori, src: SRC.rent},
+    {label: '家賃(東京23区)', sub: '賃貸・都心', amount: rent.tokyo_ku, src: SRC.rent}
   ];
   cases.forEach((c) => body.push(closing(c.label, c.sub, c.amount, c.src)));
   document.querySelector('#ledger tbody').replaceChildren(...body);
   const plain = (label) => label.replace(/\(.*\)$/, '');
   // 表の読みどころを短く書く。細かい数字は表にあるので、ここでは繰り返さない
-  const short = (v) => (v < 0 ? '月' + man1(-v) + '万円の不足' : 'ほぼ収支が合います(' + comma(v) + '円の余り)');
+  const short = (v) => (v < 0 ? '月' + man1(-v) + '万円の不足' : '月' + man1(v) + '万円の余り');
   const [k0, k1, k2] = incomes;
   document.getElementById('ledger-result').textContent =
-    '基礎年金だけの人は、家賃のかからない持ち家でも月' + man1(-k1.before) + '万〜' + man1(-k0.before) + '万円足りません。'
-    + '厚生年金の人の平均は、持ち家なら' + (k2.before < 0 ? short(k2.before) + 'です' : short(k2.before)) + '。'
+    '基礎年金だけの人は、持ち家でも月' + man1(ownCost - k1.before) + '万〜' + man1(ownCost - k0.before) + '万円足りません。'
+    + '厚生年金の人の平均は、持ち家なら' + short(k2.before - ownCost) + 'で、収支はほぼ合います。'
     + 'しかし賃貸では、青森県で' + short(k2.before - rent.aomori) + '、東京23区で' + short(k2.before - rent.tokyo_ku) + 'になります。'
     + '同じ年金でも、住まいと住む場所で暮らし向きは大きく変わります。';
 

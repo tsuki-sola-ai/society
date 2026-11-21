@@ -77,6 +77,11 @@ for row in rent.values():
 if {"national", "aomori", "tokyo_ku"} <= rent.keys():
     check(rent["aomori"]["rent"] < rent["national"]["rent"] < rent["tokyo_ku"]["rent"], "rent: 地域の大小関係が想定と違う")
 
+# 持ち家の修繕費: 家計調査の平均と持家率。家賃地代との合計が住居の計と合うこと
+own = load("own_home.json")
+check(50 < own["own_rate"] < 100 and 0 < own["repair_avg"] < 50_000, "own_home: 持家率か修繕費が想定範囲外")
+check(abs(own["repair_avg"] + own["rent_avg"] - own["housing_avg"]) <= 5, "own_home: 修繕費と家賃地代の合計が住居の計と合わない")
+
 # 保護を受ける割合: 年の昇順で、割合が現実的な範囲にあること
 hogo_rate = load("hogo_rate.json")
 check([r["year"] for r in hogo_rate] == sorted({r["year"] for r in hogo_rate}), "hogo_rate: 年が昇順でないか重複している")
