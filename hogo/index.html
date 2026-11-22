@@ -85,7 +85,9 @@ details ul{margin:8px 0 0;padding-left:1.3em;display:flex;flex-direction:column;
     </details>
   </section>
 
-  <footer><a href="../">問いの一覧</a> ・ <a href="../kanri/">データの管理状況</a><span data-views="page" hidden> ・ 閲覧 <b></b>回</span></footer>
+  <section data-reaction hidden></section>
+
+  <footer><a href="../">問いの一覧</a> ・ <a href="../kanri/">データの管理状況</a><span data-views="page" hidden> ・ 閲覧 <b data-views-n></b>回</span></footer>
 </main>
 <script>
 const load = (name) => fetch('../data/' + name + '.json').then((r) => { if (!r.ok) throw new Error(name); return r.json(); });
@@ -118,6 +120,7 @@ Promise.all(['hogo_gap', 'hogo_rate'].map(load)).then(([gap, rate]) => {
   document.querySelectorAll('[data-n]').forEach((e) => { e.textContent = n[e.dataset.n]; });
 }).catch((e) => { console.error(e); document.getElementById('bars').textContent = 'データを読み込めませんでした。'; });
 </script>
+<script src="../assets/reaction.js"></script>
 <script src="../assets/views.js"></script>
 <script data-goatcounter="https://tsuki-sola.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
