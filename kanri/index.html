@@ -27,12 +27,14 @@
   </section>
 
   <section>
-    <p class="muted">「自動」は、毎月8日にGitHub Actionsが取得し、検算に通ったものだけを反映します。実行の履歴と結果は <a href="https://github.com/tsuki-sola-ai/society/actions">Actionsの画面</a> で確認できます。「手動」は、新しい資料が出たときにファイルを書き換えます。「手元の最新」は、このサイトが持っているデータの時点で、取得先にそれより新しいものが出ている場合があります。</p>
+    <p class="muted">「自動」は、毎月8日にGitHub Actionsが取得し、検算に通ったものだけを反映します。実行の履歴と結果は <a href="https://github.com/tsuki-sola-ai/society/actions">Actionsの画面</a> で確認できます。「手動」は、新しい資料が出たときにファイルを書き換えます。「手元の最新」は、このサイトが持っているデータの時点で、取得先にそれより新しいものが出ている場合があります。問いの下の「閲覧」「役に立った」「分かりにくい」は、これまでの回数です。反映まで最大4時間かかり、「—」はまだ0回か、取得できなかったときです。</p>
   </section>
 
   <footer><a href="../">問いの一覧</a> ・ <a href="https://github.com/tsuki-sola-ai/society">GitHub</a></footer>
 </main>
 
+<script src="../assets/reaction.js"></script>
+<script src="../assets/views.js"></script>
 <script>
 const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
 const link = (text, href) => { const a = el('a', text); a.href = href; return a; };
@@ -42,6 +44,14 @@ const parseCsv = (text) => {
   const [head, ...lines] = text.trim().split(/\r?\n/);
   const cols = head.split(',');
   return lines.map((line) => { const v = line.split(','); return Object.fromEntries(cols.map((c, i) => [c, v[i]])); });
+};
+// 閲覧数と反応の件数。GoatCounterに問い合わせ、0回のときや取得できないときは「—」のまま
+const reactions = (path) => {
+  const box = el('div', null, 'muted');
+  const add = (label, name) => { const n = el('b', '—'); box.append(box.childNodes.length ? ' ・ ' : '', label + ' ', n); if (window.viewCount) window.viewCount(name).then((v) => { if (v) n.textContent = v; }); };
+  add('閲覧', path);
+  (window.reactionChoices || []).forEach(([kind, label]) => add(label, window.reactionEvent(kind, path)));
+  return box;
 };
 const get = (path) => fetch('../' + path).then((r) => { if (!r.ok) throw new Error(path); return r; });
 
@@ -58,7 +68,7 @@ Promise.all([get('data/questions.json').then((r) => r.json()), get('data/observa
       if (i === 0) {
         const td = el('td'); td.rowSpan = q.sources.length;
         const pageUrl = new URL('../' + q.url, location.href).href;
-        td.append(link(q.title, pageUrl), el('div', pageUrl.replace(/^https?:\/\//, ''), 'muted'));
+        td.append(link(q.title, pageUrl), el('div', pageUrl.replace(/^https?:\/\//, ''), 'muted'), reactions(new URL(pageUrl).pathname));
         tr.append(td);
       }
       const src = el('td');

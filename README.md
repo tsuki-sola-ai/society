@@ -19,6 +19,7 @@
 | `kanri/index.html` | 管理用の一覧。`data/questions.json` と `data/observations.csv` から作る |
 | `assets/base.css` | 一覧と管理ページの共通スタイル |
 | `assets/views.js` | 閲覧数の表示。集計は GoatCounter(クッキーなし)。管理ページは計測していない |
+| `assets/reaction.js` | 問いのページ下の反応ボタン(役に立った/分かりにくい)。押された回数を GoatCounter のイベントで数える。件数は管理ページにだけ出す |
 | `data/questions.json` | 問いの台帳。問いごとの取得先、頻度、取得方法、主なデータ |
 | `data/pension.json` | 年金月額階級別の受給権者数(年1回、手動更新) |
 | `data/thresholds.json` | 必要な額の元になる生活保護の基準(生活扶助の例と住宅扶助の上限。制度改定時に手動更新) |
@@ -45,7 +46,7 @@
 
 ## 問いを足すとき
 
-1. `新しいフォルダ/index.html` に問いのページを作る
+1. `新しいフォルダ/index.html` に問いのページを作る。フッターの前に `<section data-reaction hidden></section>` を置き、`assets/reaction.js` を読み込む
 2. `data/questions.json` に、問い、簡潔な結論、取得先を1件足す
 3. 一覧と管理ページには自動で載る。`scripts/validate.py` が台帳の抜けを検査する
 

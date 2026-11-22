@@ -25,3 +25,8 @@ td.nowrap{white-space:nowrap}
 .tag{display:inline-block;font-size:12px;border:1px solid currentColor;border-radius:4px;padding:0 6px;line-height:1.6}
 .tag.auto{color:var(--ok)}
 .tag.manual{color:var(--warn)}
+.reaction{display:flex;flex-direction:column;gap:8px}
+.reaction-row{display:flex;flex-wrap:wrap;gap:8px}
+.reaction button{font:inherit;font-size:14px;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 16px;min-height:44px;cursor:pointer}
+.reaction button:hover{border-color:var(--c0)}
+.reaction button:focus-visible{outline:2px solid var(--c0);outline-offset:2px}
